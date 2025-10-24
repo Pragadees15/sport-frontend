@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import 'leaflet/dist/leaflet.css';
+
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind base;
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind components;
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind utilities;
+
+@layer base {
+  * {
+    font-family: Inter, sans-serif;
+  }
+  
+  body {
+    font-feature-settings: "cv03", "cv04", "cv11";
+  }
+
+  /* Ensure emoji rendering works properly */
+  .emoji {
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Android Emoji", EmojiSymbols, sans-serif;
+    font-variant-emoji: emoji;
+  }
+
+  /* Avatar quality improvements */
+  img[alt*="avatar"], img[alt*="Avatar"], img[alt*="User"] {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+
+  /* Mobile-specific improvements */
+  @media (max-width: 768px) {
+    /* Prevent zoom on input focus */
+    input, textarea, select {
+      font-size: 16px;
+    }
+    
+    /* Improve touch targets */
+    button, a, [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    /* Better scrolling on mobile */
+    * {
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+}

@@ -535,57 +535,57 @@ export function MessagingInterface({ conversationId, onBack, onConversationUpdat
   }
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-white to-gray-50">
+    <div className="h-full flex flex-col bg-gradient-to-br from-white to-gray-50" style={{ height: '100%', maxHeight: '100vh', overflow: 'hidden' }}>
       {/* Modern Header - Fixed */}
-      <div className="sticky top-0 z-10 p-4 border-b border-gray-200/50 bg-white/80 backdrop-blur-lg shadow-sm">
+      <div className="flex-shrink-0 p-3 sm:p-4 border-b border-gray-200/50 bg-white/90 backdrop-blur-lg shadow-sm">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
             {onBack && (
               <button
                 onClick={onBack}
-                className="p-2 hover:bg-gray-100 rounded-xl transition-colors md:hidden"
+                className="p-2 hover:bg-gray-100 rounded-lg sm:rounded-xl transition-colors md:hidden flex-shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
-                <ArrowLeft className="h-5 w-5" />
+                <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
             )}
             
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
               {conversation.type === 'direct' && getOtherParticipants().length === 1 ? (
-                <div className="relative">
+                <div className="relative flex-shrink-0">
                   <Avatar
                     src={getOtherParticipants()[0]?.user?.avatar_url}
                     alt={getOtherParticipants()[0]?.user?.name || 'Unknown User'}
                     name={getOtherParticipants()[0]?.user?.name || 'Unknown User'}
                     size="md"
-                    className="ring-2 ring-white shadow-sm"
+                    className="h-10 w-10 sm:h-12 sm:w-12 ring-2 ring-white shadow-sm"
                   />
-                  <div className={`absolute -bottom-1 -right-1 w-3 h-3 ${getStatusColor()} rounded-full ring-2 ring-white`}></div>
+                  <div className={`absolute -bottom-0.5 -right-0.5 sm:-bottom-1 sm:-right-1 w-3 h-3 sm:w-3.5 sm:h-3.5 ${getStatusColor()} rounded-full ring-2 ring-white`}></div>
                 </div>
               ) : (
                 conversation.photo_url ? (
                   <img
                     src={conversation.photo_url}
                     alt="Group photo"
-                    className="h-12 w-12 rounded-full object-cover ring-2 ring-white shadow-sm"
+                    className="h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover ring-2 ring-white shadow-sm flex-shrink-0"
                   />
                 ) : (
-                  <div className="h-12 w-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center ring-2 ring-white shadow-sm">
-                    <span className="text-white font-semibold">
+                  <div className="h-10 w-10 sm:h-12 sm:w-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center ring-2 ring-white shadow-sm flex-shrink-0">
+                    <span className="text-white font-semibold text-sm sm:text-base">
                       {conversation?.participants?.length || 0}
                     </span>
                   </div>
                 )
               )}
               
-              <div>
-                <h2 className="font-semibold text-gray-900">{getConversationTitle()}</h2>
+              <div className="flex-1 min-w-0">
+                <h2 className="font-semibold text-gray-900 text-sm sm:text-base truncate">{getConversationTitle()}</h2>
                 {conversation.type === 'group' ? (
-                  <p className="text-sm text-gray-600">
+                  <p className="text-xs sm:text-sm text-gray-600 truncate">
                     {conversation.participants.length} members
                   </p>
                 ) : (
                   <div>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-xs sm:text-sm text-gray-600 truncate">
                       {typing.length > 0 ? 'typing...' : getStatusText()}
                     </p>
                   </div>
@@ -594,14 +594,14 @@ export function MessagingInterface({ conversationId, onBack, onConversationUpdat
             </div>
           </div>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
             {conversation.type === 'group' && isGroupAdmin() && (
               <button
                 onClick={() => setShowEditGroup(true)}
-                className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-lg sm:rounded-xl transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 title="Edit Group"
               >
-                <Settings className="h-5 w-5 text-gray-600" />
+                <Settings className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
               </button>
             )}
             <MoreMenuDropdown
@@ -615,7 +615,7 @@ export function MessagingInterface({ conversationId, onBack, onConversationUpdat
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50/50 to-white">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50/50 to-white overscroll-contain" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}>
         {[...messages]
           .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
           .map((message, index, arr) => {
@@ -731,9 +731,9 @@ export function MessagingInterface({ conversationId, onBack, onConversationUpdat
       </div>
 
       {/* Modern Message Input */}
-      <div className="p-4 border-t border-gray-200/50 bg-white/80 backdrop-blur-lg">
+      <div className="flex-shrink-0 p-2 sm:p-3 md:p-4 border-t border-gray-200/50 bg-white/80 backdrop-blur-lg pb-safe">
         <div
-          className={`flex items-end space-x-3 ${isDragging ? 'ring-2 ring-blue-400 rounded-2xl' : ''}`}
+          className={`flex items-end space-x-2 sm:space-x-3 ${isDragging ? 'ring-2 ring-blue-400 rounded-2xl' : ''}`}
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={(e) => {
@@ -751,8 +751,8 @@ export function MessagingInterface({ conversationId, onBack, onConversationUpdat
               e.currentTarget.value = '';
             }
           }} multiple />
-          <button className="p-3 hover:bg-gray-100 rounded-xl transition-colors" onClick={() => fileInputRef.current?.click()}>
-            <Paperclip className="h-5 w-5 text-gray-600" />
+          <button className="p-2 sm:p-2.5 md:p-3 hover:bg-gray-100 rounded-lg sm:rounded-xl transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center" onClick={() => fileInputRef.current?.click()}>
+            <Paperclip className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
           </button>
           
           <div className="flex-1 relative">
@@ -762,7 +762,7 @@ export function MessagingInterface({ conversationId, onBack, onConversationUpdat
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
               placeholder="Type a message..."
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:bg-white transition-all duration-200"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-gray-50 border border-gray-200 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:bg-white transition-all duration-200 text-sm sm:text-base"
               disabled={sending}
               ref={inputRef}
             />
@@ -794,11 +794,11 @@ export function MessagingInterface({ conversationId, onBack, onConversationUpdat
             )}
           </div>
           
-          <button id="emoji-button" onClick={() => setShowEmojiPicker(v => !v)} className="p-3 hover:bg-gray-100 rounded-xl transition-colors">
-            <Smile className="h-5 w-5 text-gray-600" />
+          <button id="emoji-button" onClick={() => setShowEmojiPicker(v => !v)} className="p-2 sm:p-2.5 md:p-3 hover:bg-gray-100 rounded-lg sm:rounded-xl transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
+            <Smile className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
           </button>
           {showEmojiPicker && (
-            <div id="emoji-popover" className="absolute bottom-16 right-0 bg-white border border-gray-200 rounded-xl shadow-xl p-3 z-50 w-80 md:w-96">
+            <div id="emoji-popover" className="absolute bottom-14 sm:bottom-16 right-0 bg-white border border-gray-200 rounded-xl shadow-xl p-2 sm:p-3 z-50 w-[calc(100vw-2rem)] max-w-sm sm:max-w-md md:w-96">
               <Picker
                 data={data}
                 onEmojiSelect={(e: any) => insertEmoji(e.native || e.shortcodes || '')}
@@ -820,12 +820,12 @@ export function MessagingInterface({ conversationId, onBack, onConversationUpdat
             onClick={sendMessage}
             disabled={(newMessage.trim().length === 0 && pendingFiles.length === 0) || sending}
             size="sm"
-            className="px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-xl"
+            className="px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg sm:rounded-xl min-h-[44px] min-w-[44px] flex items-center justify-center"
           >
             {sending ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+              <div className="animate-spin rounded-full h-3.5 w-3.5 sm:h-4 sm:w-4 border-b-2 border-white"></div>
             ) : (
-              <Send className="h-4 w-4" />
+              <Send className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             )}
           </Button>
         </div>

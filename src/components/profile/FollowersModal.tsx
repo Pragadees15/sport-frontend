@@ -122,7 +122,7 @@ export function FollowersModal({ users, type, onClose }: FollowersModalProps) {
   }, [currentUser, loadingUsers]);
 
   const isFollowing = (userId: string) => {
-    return followingUsers.has(userId) || (type === 'following');
+    return followingUsers.has(userId);
   };
 
   // Memoized button text and variant functions
@@ -132,13 +132,13 @@ export function FollowersModal({ users, type, onClose }: FollowersModalProps) {
       return isFollowing(user.id) ? 'Following' : 'Follow Back';
     }
     return 'Unfollow';
-  }, [currentUser?.id, type]);
+  }, [currentUser?.id, type, followingUsers]);
 
   const getButtonVariant = useCallback((user: User) => {
     if (user.id === currentUser?.id) return 'outline';
     if (type === 'followers' && !isFollowing(user.id)) return 'primary';
     return 'outline';
-  }, [currentUser?.id, type]);
+  }, [currentUser?.id, type, followingUsers]);
 
   return (
     <AnimatePresence>
@@ -153,21 +153,21 @@ export function FollowersModal({ users, type, onClose }: FollowersModalProps) {
           initial={{ scale: 0.9, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
-          className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden border border-gray-100"
+          className="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden border border-gray-100"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Enhanced Header */}
-          <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6">
+          <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 sm:p-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                  <Users className="h-5 w-5 text-white" />
+              <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
+                  <Users className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                 </div>
-                <div>
-                  <h2 className="text-xl font-bold text-white capitalize">
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-lg sm:text-xl font-bold text-white capitalize truncate">
                     {type} ({displayUsers.length})
                   </h2>
-                  <p className="text-white/80 text-sm">
+                  <p className="text-white/80 text-xs sm:text-sm truncate">
                     {type === 'followers' ? 'People who follow you' : 'People you follow'}
                   </p>
                 </div>
@@ -176,23 +176,23 @@ export function FollowersModal({ users, type, onClose }: FollowersModalProps) {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={onClose}
-                className="text-white/80 hover:text-white transition-colors p-2 hover:bg-white/20 rounded-full"
+                className="text-white/80 hover:text-white transition-colors p-1.5 sm:p-2 hover:bg-white/20 rounded-full flex-shrink-0 ml-2"
               >
-                <X className="h-6 w-6" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </motion.button>
             </div>
           </div>
 
           {/* Enhanced Search */}
-          <div className="p-6 border-b border-gray-100 bg-gray-50/50">
+          <div className="p-4 sm:p-6 border-b border-gray-100 bg-gray-50/50">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
               <input
                 type="text"
                 placeholder={`Search ${type}...`}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
               />
             </div>
           </div>
@@ -200,14 +200,14 @@ export function FollowersModal({ users, type, onClose }: FollowersModalProps) {
           {/* Enhanced Users List */}
           <div className="overflow-y-auto max-h-96">
             {filteredUsers.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Users className="h-10 w-10 text-gray-400" />
+              <div className="text-center py-8 sm:py-12 px-4">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                  <Users className="h-8 w-8 sm:h-10 sm:w-10 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1.5 sm:mb-2">
                   {searchTerm ? 'No users found' : `No ${type} yet`}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600">
                   {searchTerm 
                     ? 'Try adjusting your search terms' 
                     : type === 'followers' 
@@ -225,42 +225,46 @@ export function FollowersModal({ users, type, onClose }: FollowersModalProps) {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
                     whileHover={{ scale: 1.01 }}
-                    className="p-6 hover:bg-gray-50 transition-all duration-200"
+                    className="p-3 sm:p-4 md:p-6 hover:bg-gray-50 transition-all duration-200"
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div className="relative">
-                          <Avatar
-                            src={user.avatar_url || user.profileImage}
-                            alt={(user.name || user.fullName || user.username || 'User')}
-                            name={(user.name || user.fullName || user.username || 'User')}
-                            size="lg"
-                            className="h-16 w-16 border-2 border-white shadow-lg"
-                          />
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0 flex-1">
+                        <div className="relative flex-shrink-0">
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
+                            <Avatar
+                              src={user.avatar_url || user.profileImage}
+                              alt={(user.name || user.fullName || user.username || 'User')}
+                              name={(user.name || user.fullName || user.username || 'User')}
+                              size="lg"
+                              className="w-full h-full border-2 border-white shadow-lg"
+                            />
+                          </div>
                           {user.is_verified && (
-                            <div className="absolute -top-1 -right-1 bg-white rounded-full p-1 shadow-md">
-                              <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                            <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 bg-white rounded-full p-0.5 sm:p-1 shadow-md">
+                              <div className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center ${
                                 user.role === 'admin' || user.role === 'administrator' ? 'bg-orange-500' :
                                 user.role === 'coach' ? 'bg-violet-500' : 'bg-blue-500'
                               }`}>
-                                <Shield className="h-3 w-3 text-white" />
+                                <Shield className="h-2 w-2 sm:h-2.5 sm:w-2.5 md:h-3 md:w-3 text-white" />
                               </div>
                             </div>
                           )}
                         </div>
                         
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center space-x-2 mb-1">
-                            <h3 className="font-bold text-gray-900 text-lg truncate">
+                          <div className="flex items-center space-x-1.5 sm:space-x-2 mb-0.5 sm:mb-1">
+                            <h3 className="font-bold text-gray-900 text-sm sm:text-base md:text-lg truncate">
                               {user.name || user.fullName}
                             </h3>
-                            {getVerificationBadge(user)}
+                            <div className="flex-shrink-0">
+                              {getVerificationBadge(user)}
+                            </div>
                           </div>
                           {user.username && (
-                            <p className="text-sm text-gray-600 mb-2">@{user.username}</p>
+                            <p className="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-2 truncate">@{user.username}</p>
                           )}
-                          <div className="flex items-center space-x-2 mb-2">
-                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+                          <div className="flex items-center space-x-1.5 sm:space-x-2 mb-1 sm:mb-2 flex-wrap gap-y-1">
+                            <span className={`inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 rounded-full text-[10px] sm:text-xs font-semibold whitespace-nowrap ${
                               user.role === 'coach' ? 'bg-purple-100 text-purple-800' : 
                               user.role === 'aspirant' ? 'bg-blue-100 text-blue-800' :
                               'bg-gray-100 text-gray-800'
@@ -268,48 +272,56 @@ export function FollowersModal({ users, type, onClose }: FollowersModalProps) {
                               {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                             </span>
                             {shouldShowLocation(user.location) && (
-                              <div className="flex items-center space-x-1 text-xs text-gray-500">
-                                <MapPin className="h-3 w-3" />
-                                <span>{user.location}</span>
+                              <div className="flex items-center space-x-0.5 sm:space-x-1 text-[10px] sm:text-xs text-gray-500 truncate">
+                                <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3 flex-shrink-0" />
+                                <span className="truncate">{user.location}</span>
                               </div>
                             )}
                           </div>
                           {user.bio && (
-                            <p className="text-sm text-gray-600 line-clamp-2">
+                            <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 hidden sm:block">
                               {user.bio}
                             </p>
                           )}
                         </div>
                       </div>
                       
-                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex-shrink-0">
                         <Button 
                           size="sm" 
                           variant={getButtonVariant(user)}
                           onClick={() => handleFollowToggle(user.id, isFollowing(user.id))}
                           disabled={user.id === currentUser?.id || loadingUsers.has(user.id)}
-                          className={user.id === currentUser?.id 
+                          className={`text-xs sm:text-sm ${user.id === currentUser?.id 
                             ? "bg-gray-100 text-gray-500 cursor-not-allowed" 
                             : isFollowing(user.id) 
                               ? "bg-gray-100 text-gray-700 hover:bg-gray-200" 
                               : "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-                          }
+                          }`}
                         >
                           {loadingUsers.has(user.id) ? (
                             <>
-                              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                              Loading...
+                              <Loader2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 animate-spin mr-1 sm:mr-2" />
+                              <span className="hidden sm:inline">Loading...</span>
                             </>
                           ) : (
                             <>
                               {user.id === currentUser?.id ? (
-                                <UserCheck className="h-4 w-4 mr-2" />
+                                <>
+                                  <UserCheck className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 sm:mr-2" />
+                                  <span className="hidden sm:inline">{getButtonText(user)}</span>
+                                </>
                               ) : isFollowing(user.id) ? (
-                                <UserX className="h-4 w-4 mr-2" />
+                                <>
+                                  <UserX className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 sm:mr-2" />
+                                  <span className="hidden sm:inline">{getButtonText(user)}</span>
+                                </>
                               ) : (
-                                <UserPlus className="h-4 w-4 mr-2" />
+                                <>
+                                  <UserPlus className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 sm:mr-2" />
+                                  <span className="hidden sm:inline">{getButtonText(user)}</span>
+                                </>
                               )}
-                              {getButtonText(user)}
                             </>
                           )}
                         </Button>

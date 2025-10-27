@@ -149,15 +149,15 @@ export function MessageList({
 
   if (loading) {
     return (
-      <div className="p-4">
-        <div className="space-y-4">
+      <div className="p-3 sm:p-4">
+        <div className="space-y-3 sm:space-y-4">
           {[...Array(5)].map((_, i) => (
             <div key={i} className="animate-pulse">
-              <div className="flex items-center space-x-3 p-3">
-                <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+              <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-300 rounded-full"></div>
                 <div className="flex-1">
-                  <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+                  <div className="h-3 sm:h-4 bg-gray-300 rounded w-3/4 mb-1.5 sm:mb-2"></div>
+                  <div className="h-2.5 sm:h-3 bg-gray-300 rounded w-1/2"></div>
                 </div>
               </div>
             </div>
@@ -170,15 +170,15 @@ export function MessageList({
   return (
     <div className="flex flex-col h-full">
       {/* Modern Search */}
-      <div className="p-4 border-b border-gray-200/50">
+      <div className="p-3 sm:p-4 border-b border-gray-200/50">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-3.5 w-3.5 sm:h-4 sm:w-4" />
           <input
             type="text"
             placeholder="Search conversations..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-gray-50/50 border border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:bg-white transition-all duration-200"
+            className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3 bg-gray-50/50 border border-gray-200/50 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:bg-white transition-all duration-200 text-sm sm:text-base"
           />
         </div>
       </div>

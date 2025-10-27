@@ -43,8 +43,9 @@ interface MapComponentProps {
   locations: MapLocation[];
   safeLocations: SafeLocation[];
   heatMapData: LocalHeatMapData[];
+  talentHeatmapData?: any[];
   userLocation: { lat: number; lng: number; accuracy?: number; timestamp?: number } | null;
-  mapType: 'standard' | 'heatmap' | 'safety';
+  mapType: 'standard' | 'heatmap' | 'safety' | 'talent';
   tileLayer: 'standard' | 'satellite' | 'terrain' | 'dark';
   heatMapType: 'activity' | 'women-safe' | 'disability-friendly';
   onMapClick: (lat: number, lng: number) => void;
@@ -109,27 +110,24 @@ function UserLocationMarker({ userLocation }: { userLocation: { lat: number; lng
   const map = useMap();
   
   useEffect(() => {
-    if (userLocation && (!userLocation.accuracy || userLocation.accuracy <= 300)) {
-      map.setView([userLocation.lat, userLocation.lng], 13);
+    // Center map on user location if available and reasonably accurate (< 5km)
+    if (userLocation && (!userLocation.accuracy || userLocation.accuracy < 5000)) {
+      // Adjust zoom based on accuracy
+      const zoom = userLocation.accuracy 
+        ? (userLocation.accuracy <= 100 ? 15 : userLocation.accuracy <= 500 ? 14 : 13)
+        : 13;
+      map.setView([userLocation.lat, userLocation.lng], zoom);
     }
   }, [userLocation, map]);
 
   if (!userLocation) return null;
 
-  const accuracy = userLocation.accuracy || 0;
   const timestamp = userLocation.timestamp ? new Date(userLocation.timestamp).toLocaleTimeString() : 'Unknown';
-  
-  // Color code based on accuracy
-  const getAccuracyColor = (acc: number) => {
-    if (acc <= 10) return '#10B981'; // Green - Very accurate
-    if (acc <= 50) return '#F59E0B'; // Yellow - Moderate accuracy
-    return '#EF4444'; // Red - Poor accuracy
-  };
 
   const userIcon = L.divIcon({
     html: `
       <div style="
-        background-color: ${getAccuracyColor(accuracy)};
+        background-color: #10B981;
         width: 20px;
         height: 20px;
         border-radius: 50%;
@@ -152,21 +150,6 @@ function UserLocationMarker({ userLocation }: { userLocation: { lat: number; lng
 
   return (
     <>
-      {/* Accuracy circle */}
-      {accuracy > 0 && (
-        <Circle
-          center={[userLocation.lat, userLocation.lng]}
-          radius={accuracy}
-          pathOptions={{
-            color: getAccuracyColor(accuracy),
-            fillColor: getAccuracyColor(accuracy),
-            fillOpacity: 0.1,
-            weight: 2,
-            opacity: 0.5
-          }}
-        />
-      )}
-      
       {/* User location marker */}
       <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
         <Popup>
@@ -174,18 +157,6 @@ function UserLocationMarker({ userLocation }: { userLocation: { lat: number; lng
             <h3 className="font-semibold text-lg mb-2">📍 Your Location</h3>
             <div className="space-y-1 text-sm">
               <div><strong>Coordinates:</strong> {userLocation.lat.toFixed(6)}, {userLocation.lng.toFixed(6)}</div>
-              {accuracy > 0 && (
-                <div>
-                  <strong>Accuracy:</strong> ±{Math.round(accuracy)}m 
-                  <span className={`ml-1 px-2 py-1 rounded text-xs ${
-                    accuracy <= 10 ? 'bg-green-100 text-green-800' :
-                    accuracy <= 50 ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
-                    {accuracy <= 10 ? 'Very Accurate' : accuracy <= 50 ? 'Moderate' : 'Poor'}
-                  </span>
-                </div>
-              )}
               <div><strong>Last Updated:</strong> {timestamp}</div>
             </div>
           </div>

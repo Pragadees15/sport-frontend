@@ -208,40 +208,40 @@ export function SuggestedUsers() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6"
+      className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-6"
     >
-      <div className="flex items-center space-x-3 mb-6">
-        <div className="p-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg">
-          <Users className="h-5 w-5 text-white" />
+      <div className="flex items-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
+        <div className="p-1.5 sm:p-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg">
+          <Users className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
         </div>
-        <h3 className="text-xl font-bold text-gray-900">Suggested for you</h3>
+        <h3 className="text-lg sm:text-xl font-bold text-gray-900">Suggested for you</h3>
       </div>
 
       {loading ? (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {[...Array(3)].map((_, i) => (
             <div key={i} className="animate-pulse">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded-full"></div>
                 <div className="flex-1">
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                  <div className="h-3 sm:h-4 bg-gray-200 rounded w-3/4 mb-1.5 sm:mb-2"></div>
+                  <div className="h-2.5 sm:h-3 bg-gray-200 rounded w-1/2"></div>
                 </div>
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {suggestedUsers.map((suggestedUser, index) => (
             <motion.div
               key={suggestedUser.id}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="group bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 hover:from-blue-50 hover:to-purple-50 transition-all duration-300 overflow-hidden"
+              className="group bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:from-blue-50 hover:to-purple-50 transition-all duration-300 overflow-hidden"
             >
-              <div className="flex items-start space-x-3 w-full">
+              <div className="flex items-start space-x-2 sm:space-x-3 w-full">
                 <div className="relative flex-shrink-0">
                   <Avatar
                     src={suggestedUser.avatar_url}
@@ -344,10 +344,10 @@ export function SuggestedUsers() {
       )}
       
       {suggestedUsers.length > 0 && (
-        <div className="mt-4 pt-4 border-t border-gray-100">
+        <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-100">
           <button 
             onClick={handleSeeAllSuggestions}
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium w-full text-center transition-colors duration-200 hover:bg-blue-50 rounded-lg py-2"
+            className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 font-medium w-full text-center transition-colors duration-200 hover:bg-blue-50 rounded-lg py-1.5 sm:py-2"
           >
             See all suggestions
           </button>

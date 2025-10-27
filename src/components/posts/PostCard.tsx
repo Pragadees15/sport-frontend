@@ -372,12 +372,12 @@ export function PostCard({ post, onDelete }: PostCardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6 hover:shadow-md transition-all duration-300"
+      className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-4 sm:mb-6 hover:shadow-md transition-all duration-300"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 sm:p-6">
-        <div className="flex items-center space-x-3">
-          <div className="relative">
+      <div className="flex items-center justify-between p-3 sm:p-4 lg:p-6">
+        <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+          <div className="relative flex-shrink-0">
             <Avatar
               src={postAuthor.avatar_url}
               fallbackSrc={postAuthor.profileImage}
@@ -386,21 +386,19 @@ export function PostCard({ post, onDelete }: PostCardProps) {
               size="md"
               className="ring-2 ring-white shadow-sm"
             />
-            {/* Online indicator */}
-            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
           </div>
           <div className="min-w-0 flex-1">
-            <div className="flex items-center space-x-2">
-              <h3 className="font-semibold text-gray-900 truncate text-base">{postAuthor.username || postAuthor.name || postAuthor.fullName}</h3>
+            <div className="flex items-center space-x-1.5 sm:space-x-2">
+              <h3 className="font-semibold text-gray-900 truncate text-sm sm:text-base">{postAuthor.username || postAuthor.name || postAuthor.fullName}</h3>
               {getVerificationBadge()}
             </div>
-            <div className="flex items-center space-x-2 mt-1">
+            <div className="flex items-center space-x-1.5 sm:space-x-2 mt-0.5 sm:mt-1">
               {post.sports_category && (
-                <span className="text-sm text-gray-500 capitalize bg-gray-100 px-2 py-1 rounded-full">
+                <span className="text-[11px] sm:text-sm text-gray-500 capitalize bg-gray-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full truncate max-w-[100px] sm:max-w-none">
                   {post.sports_category.replace('-', ' ')}
                 </span>
               )}
-              <span className="text-xs text-gray-400">
+              <span className="text-[10px] sm:text-xs text-gray-400 truncate">
                 {new Date(post.createdAt || post.created_at).toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
@@ -412,10 +410,10 @@ export function PostCard({ post, onDelete }: PostCardProps) {
           </div>
         </div>
         
-        <div className="relative">
+        <div className="relative flex-shrink-0">
           <button 
             onClick={() => setShowMenu(!showMenu)}
-            className="text-gray-400 hover:text-gray-600 transition-all duration-200 p-2 rounded-full hover:bg-gray-100"
+            className="text-gray-400 hover:text-gray-600 transition-all duration-200 p-1.5 sm:p-2 rounded-full hover:bg-gray-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
           >
             <MoreHorizontal className="h-5 w-5" />
           </button>
@@ -460,8 +458,8 @@ export function PostCard({ post, onDelete }: PostCardProps) {
 
       {/* Content */}
       {post.content && (
-        <div className="px-4 sm:px-6 pb-4">
-          <p className="text-gray-900 whitespace-pre-wrap text-base leading-relaxed">{post.content}</p>
+        <div className="px-3 sm:px-4 lg:px-6 pb-3 sm:pb-4">
+          <p className="text-gray-900 whitespace-pre-wrap text-sm sm:text-base leading-relaxed break-words">{post.content}</p>
         </div>
       )}
 
@@ -501,9 +499,10 @@ export function PostCard({ post, onDelete }: PostCardProps) {
                 <div className="relative group">
                   <video
                     src={mediaUrl}
-                    className="w-full h-64 sm:h-96 object-cover"
+                    className="w-full h-56 sm:h-72 md:h-80 lg:h-96 object-cover"
                     controls
                     poster=""
+                    playsInline
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
                 </div>
@@ -536,7 +535,8 @@ export function PostCard({ post, onDelete }: PostCardProps) {
                   <img
                     src={mediaUrl}
                     alt="Post content"
-                    className="w-full h-64 sm:h-96 object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-56 sm:h-72 md:h-80 lg:h-96 object-cover transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
                 </div>
@@ -547,32 +547,32 @@ export function PostCard({ post, onDelete }: PostCardProps) {
       )}
 
       {/* Actions */}
-      <div className="px-4 sm:px-6 py-4 border-t border-gray-100">
+      <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-t border-gray-100">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-3 sm:space-x-4 md:space-x-6">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleLike}
               disabled={isLiking}
-              className={`flex items-center space-x-2 transition-all duration-200 disabled:opacity-50 px-3 py-2 rounded-xl ${
+              className={`flex items-center space-x-1.5 sm:space-x-2 transition-all duration-200 disabled:opacity-50 px-2 sm:px-3 py-2 rounded-lg sm:rounded-xl min-h-[44px] ${
                 isLiked 
                   ? 'text-red-500 bg-red-50 hover:bg-red-100' 
                   : 'text-gray-500 hover:text-red-500 hover:bg-red-50'
               }`}
             >
-              <Heart className={`h-5 w-5 ${isLiked ? 'fill-current' : ''}`} />
-              <span className="text-sm font-medium">{likesCount}</span>
+              <Heart className={`h-5 w-5 sm:h-5 sm:w-5 ${isLiked ? 'fill-current' : ''}`} />
+              <span className="text-xs sm:text-sm font-medium">{likesCount}</span>
             </motion.button>
             
             <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowComments(!showComments)}
-              className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 hover:bg-blue-50 transition-all duration-200 px-3 py-2 rounded-xl"
+              className="flex items-center space-x-1.5 sm:space-x-2 text-gray-500 hover:text-blue-500 hover:bg-blue-50 transition-all duration-200 px-2 sm:px-3 py-2 rounded-lg sm:rounded-xl min-h-[44px]"
             >
-              <MessageCircle className="h-5 w-5" />
-              <span className="text-sm font-medium">{commentsCount}</span>
+              <MessageCircle className="h-5 w-5 sm:h-5 sm:w-5" />
+              <span className="text-xs sm:text-sm font-medium">{commentsCount}</span>
             </motion.button>
             
             <motion.button
@@ -580,10 +580,10 @@ export function PostCard({ post, onDelete }: PostCardProps) {
               whileTap={{ scale: 0.95 }}
               onClick={handleShare}
               disabled={isSharing}
-              className="flex items-center space-x-2 text-gray-500 hover:text-green-500 hover:bg-green-50 transition-all duration-200 disabled:opacity-50 px-3 py-2 rounded-xl"
+              className="flex items-center space-x-1.5 sm:space-x-2 text-gray-500 hover:text-green-500 hover:bg-green-50 transition-all duration-200 disabled:opacity-50 px-2 sm:px-3 py-2 rounded-lg sm:rounded-xl min-h-[44px]"
             >
-              <Share className="h-5 w-5" />
-              <span className="text-sm font-medium">{sharesCount}</span>
+              <Share className="h-5 w-5 sm:h-5 sm:w-5" />
+              <span className="text-xs sm:text-sm font-medium">{sharesCount}</span>
             </motion.button>
           </div>
         </div>

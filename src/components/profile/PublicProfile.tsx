@@ -30,7 +30,7 @@ import toast from 'react-hot-toast';
 export function PublicProfile() {
   const { username } = useParams<{ username: string }>();
   const navigate = useNavigate();
-  const { user: currentUser } = useAuthStore();
+  const { user: currentUser, isAuthenticated } = useAuthStore();
   
   const [profileUser, setProfileUser] = useState<User | null>(null);
   const [userPosts, setUserPosts] = useState<Post[]>([]);
@@ -46,24 +46,36 @@ export function PublicProfile() {
   const [isLoadingFollow, setIsLoadingFollow] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-
-  // Users can view their own profile through this component
+  // Check if user is authenticated
+  useEffect(() => {
+    if (!isAuthenticated || !currentUser) {
+      toast.error('Please log in to view profiles');
+      navigate('/auth');
+    }
+  }, [isAuthenticated, currentUser, navigate]);
 
   useEffect(() => {
+    // Don't fetch if not authenticated
+    if (!isAuthenticated || !currentUser) {
+      return;
+    }
+
     if (!username) {
       // Use setTimeout to avoid setState during render warning
       setTimeout(() => navigate('/dashboard'), 0);
       return;
     }
     
-    // Allow users to view their own profile through this component as well
-    // The /profile route will use UserProfile component for editing capabilities
-    
     fetchProfileData();
-  }, [username, navigate, currentUser?.username]);
+  }, [username, navigate, currentUser, isAuthenticated]);
 
   // Optimized profile data fetching
   const fetchProfileData = useCallback(async () => {
+    // Don't fetch if not authenticated
+    if (!isAuthenticated || !currentUser) {
+      return;
+    }
+
     try {
       setIsLoading(true);
       setError(null);
@@ -84,6 +96,14 @@ export function PublicProfile() {
       
       setProfileUser(user);
       
+      // Determine if viewing own profile by comparing IDs
+      const isOwnProfile = currentUser.id === user.id;
+      console.log('Profile comparison:', {
+        currentUserId: currentUser.id,
+        profileUserId: user.id,
+        isOwnProfile
+      });
+      
       // Parallel data fetching for better performance
       const [
         followStatusResult,
@@ -91,8 +111,8 @@ export function PublicProfile() {
         followersResult,
         followingResult
       ] = await Promise.allSettled([
-      // Check if current user is following this user (only for other users' profiles)
-        currentUser && user.id !== currentUser.id 
+        // Check if current user is following this user (only for other users' profiles)
+        !isOwnProfile
           ? apiService.checkFollowStatus(user.id)
           : Promise.resolve({ isFollowing: false }),
         // Fetch user's posts
@@ -168,11 +188,20 @@ export function PublicProfile() {
     } finally {
       setIsLoading(false);
     }
-  }, [username, currentUser]);
+  }, [username, currentUser, isAuthenticated]);
 
   // Optimized follow toggle with better error handling
   const handleFollowToggle = useCallback(async () => {
-    if (!currentUser || !profileUser) return;
+    if (!isAuthenticated || !currentUser || !profileUser) {
+      toast.error('You must be logged in to follow users');
+      return;
+    }
+
+    // Prevent following yourself
+    if (currentUser.id === profileUser.id) {
+      toast.error('You cannot follow yourself');
+      return;
+    }
     
     setIsLoadingFollow(true);
     try {
@@ -224,7 +253,7 @@ export function PublicProfile() {
     } finally {
       setIsLoadingFollow(false);
     }
-  }, [currentUser, profileUser, isFollowing]);
+  }, [currentUser, profileUser, isFollowing, isAuthenticated]);
 
 
   // Optimized share profile handler
@@ -270,7 +299,19 @@ export function PublicProfile() {
   }, [profileUser]);
 
   const handleMessage = () => {
+    if (!isAuthenticated || !currentUser) {
+      toast.error('You must be logged in to send messages');
+      return;
+    }
+    
     if (!profileUser) return;
+    
+    // Prevent messaging yourself
+    if (currentUser.id === profileUser.id) {
+      toast.error('You cannot message yourself');
+      return;
+    }
+    
     // Navigate to messaging with this user
     navigate(`/messages?user=${profileUser.id}`);
   };
@@ -285,12 +326,17 @@ export function PublicProfile() {
     setShowFollowersModal(true);
   };
 
+  // Return null if not authenticated (will redirect via useEffect)
+  if (!isAuthenticated || !currentUser) {
+    return null;
+  }
+
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-500 mx-auto mb-4" />
-          <p className="text-gray-600">Loading profile...</p>
+          <Loader2 className="h-7 w-7 sm:h-8 sm:w-8 animate-spin text-blue-500 mx-auto mb-3 sm:mb-4" />
+          <p className="text-sm sm:text-base text-gray-600">Loading profile...</p>
         </div>
       </div>
     );
@@ -298,14 +344,14 @@ export function PublicProfile() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="text-red-500 mb-4">
-            <Users className="h-12 w-12 mx-auto" />
+          <div className="text-red-500 mb-3 sm:mb-4">
+            <Users className="h-10 w-10 sm:h-12 sm:w-12 mx-auto" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">{error}</h2>
-          <Button onClick={() => navigate('/dashboard')} variant="outline">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">{ error}</h2>
+          <Button onClick={() => navigate('/dashboard')} variant="outline" className="text-sm sm:text-base">
+            <ArrowLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-2" />
             Back to Dashboard
           </Button>
         </div>
@@ -317,12 +363,13 @@ export function PublicProfile() {
     return null;
   }
 
-  // Users can now view their own profile through this component
+  // Check if viewing own profile
+  const isOwnProfile = currentUser.id === profileUser.id;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 pb-16 sm:pb-0">
       {/* Enhanced Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 px-4 py-4 sticky top-0 z-40">
+      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 px-3 sm:px-4 py-3 sm:py-4 sticky top-0 z-40">
         <div className="max-w-6xl mx-auto flex items-center">
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -332,32 +379,34 @@ export function PublicProfile() {
             onClick={() => navigate('/dashboard')}
             variant="ghost"
             size="sm"
-              className="mr-4 hover:bg-gray-100"
+              className="mr-2 sm:mr-3 md:mr-4 hover:bg-gray-100 p-1.5 sm:p-2"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           </Button>
           </motion.div>
-          <div className="flex items-center space-x-3">
-            <Avatar
-              src={profileUser.avatar_url}
-              fallbackSrc={profileUser.profileImage}
-              alt={profileUser.name || profileUser.fullName || 'User'}
-              name={profileUser.name || profileUser.fullName}
-              userId={profileUser.id}
-              size="sm"
-              className="border-2 border-white shadow-md"
-            />
-            <div>
-          <h1 className="text-lg font-semibold text-gray-900">
+          <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
+              <Avatar
+                src={profileUser.avatar_url}
+                fallbackSrc={profileUser.profileImage}
+                alt={profileUser.name || profileUser.fullName || 'User'}
+                name={profileUser.name || profileUser.fullName}
+                userId={profileUser.id}
+                size="sm"
+                className="w-full h-full border-2 border-white shadow-md"
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+          <h1 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 truncate">
             {profileUser.name || profileUser.fullName}'s Profile
           </h1>
-              <p className="text-sm text-gray-500">@{profileUser.username}</p>
+              <p className="text-xs sm:text-sm text-gray-500 truncate">@{profileUser.username}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         {/* Enhanced Profile Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -376,8 +425,8 @@ export function PublicProfile() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
           
-          <div className="relative p-8 md:p-12">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-6 lg:space-y-0 lg:space-x-8">
+          <div className="relative p-4 sm:p-6 md:p-8 lg:p-12">
+            <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-4 sm:space-y-6 lg:space-y-0 lg:space-x-6 xl:space-x-8">
               {/* Enhanced Avatar */}
               <div className="relative group">
                 <div className="absolute -inset-1 bg-gradient-to-r from-pink-600 to-purple-600 rounded-full opacity-75 group-hover:opacity-100 transition duration-300"></div>
@@ -405,62 +454,61 @@ export function PublicProfile() {
               </div>
 
               {/* Enhanced Profile Info */}
-              <div className="flex-1 text-white">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <h1 className="text-3xl md:text-4xl font-bold">{profileUser.name || profileUser.fullName}</h1>
+              <div className="flex-1 text-white w-full">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4">
+                  <div className="flex items-center space-x-2 sm:space-x-3 mb-2 sm:mb-0 flex-wrap">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold break-words">{profileUser.name || profileUser.fullName}</h1>
                     {profileUser.is_verified && (
-                      <div className="flex items-center space-x-1 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
-                        <Award className="h-4 w-4" />
-                        <span className="text-sm font-medium">Verified</span>
+                      <div className="flex items-center space-x-1 bg-white/20 backdrop-blur-sm rounded-full px-2 py-1 sm:px-3 sm:py-1 flex-shrink-0">
+                        <Award className="h-3 w-3 sm:h-4 sm:w-4" />
+                        <span className="text-xs sm:text-sm font-medium">Verified</span>
                       </div>
                     )}
               </div>
 
-              {/* Action Buttons */}
-              {currentUser && (
-                <div className="flex items-center space-x-3">
-                  {currentUser.id === profileUser.id ? (
-                        // Own profile
-                    <>
-                      <Button
-                        onClick={() => navigate('/profile')}
-                            variant="outline"
-                        size="sm"
-                            className="bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm"
-                      >
-                        <Settings className="h-4 w-4 mr-2" />
-                        Edit Profile
-                      </Button>
-                      <Button
-                        onClick={handleShareProfile}
-                        variant="outline"
-                        size="sm"
-                            className="bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm"
-                      >
-                            <Share2 className="h-4 w-4 mr-2" />
-                        Share
-                      </Button>
-                    </>
-                  ) : (
-                        // Other user's profile
-                    <>
-                          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              {/* Action Buttons - Only show if authenticated */}
+              <div className="flex items-center flex-wrap gap-2 sm:gap-3">
+                {isOwnProfile ? (
+                  // Own profile
+                  <>
+                    <Button
+                      onClick={() => navigate('/profile')}
+                      variant="outline"
+                      size="sm"
+                      className="bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm"
+                    >
+                      <Settings className="h-4 w-4 mr-2" />
+                      Edit Profile
+                    </Button>
+                    <Button
+                      onClick={handleShareProfile}
+                      variant="outline"
+                      size="sm"
+                      className="bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm"
+                    >
+                      <Share2 className="h-4 w-4 mr-2" />
+                      Share
+                    </Button>
+                  </>
+                ) : (
+                  // Other user's profile
+                  <>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Button
                         onClick={handleFollowToggle}
                         disabled={isLoadingFollow}
                         variant={isFollowing ? "outline" : "primary"}
                         size="sm"
-                              className={isFollowing 
-                                ? "bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm" 
-                                : "bg-white text-gray-900 hover:bg-gray-100"
-                              }
+                        className={isFollowing 
+                          ? "bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm" 
+                          : "bg-white text-gray-900 hover:bg-gray-100"
+                        }
                       >
                         {isLoadingFollow ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : isFollowing ? (
                           <>
-                                  <UserMinus className="h-4 w-4 mr-2" />
+                            <UserMinus className="h-4 w-4 mr-2" />
                             Unfollow
                           </>
                         ) : (
@@ -470,91 +518,90 @@ export function PublicProfile() {
                           </>
                         )}
                       </Button>
-                          </motion.div>
-                          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    </motion.div>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Button
                         onClick={handleMessage}
                         variant="outline"
                         size="sm"
-                              className="bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm"
+                        className="bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm"
                       >
                         <MessageCircle className="h-4 w-4 mr-2" />
                         Message
                       </Button>
-                          </motion.div>
-                          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    </motion.div>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Button
                         onClick={handleShareProfile}
                         variant="outline"
                         size="sm"
-                              className="bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm"
+                        className="bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm"
                       >
-                              <Share2 className="h-4 w-4 mr-2" />
+                        <Share2 className="h-4 w-4 mr-2" />
                         Share
                       </Button>
-                          </motion.div>
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
+                    </motion.div>
+                  </>
+                )}
+              </div>
+            </div>
                 
-                <p className="text-white/90 text-lg mb-2">@{profileUser.username}</p>
-                <div className="flex items-center space-x-4 text-white/80 mb-4">
+            <p className="text-white/90 text-base sm:text-lg mb-1.5 sm:mb-2 break-all">@{profileUser.username}</p>
+                <div className="flex items-center flex-wrap gap-x-3 sm:gap-x-4 gap-y-2 text-white/80 mb-3 sm:mb-4">
                   <div className="flex items-center space-x-1">
-                    <Trophy className="h-4 w-4" />
-                    <span className="capitalize font-medium">
+                    <Trophy className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                    <span className="capitalize font-medium text-sm sm:text-base">
                       {profileUser.role === 'coach' ? 'Professional Coach' : 
                        profileUser.role === 'aspirant' ? 'Aspiring Athlete' : 'Sports Fan'}
                     </span>
                   </div>
                   {shouldShowLocation(profileUser.location) && (
                     <div className="flex items-center space-x-1">
-                      <MapPin className="h-4 w-4" />
-                      <span>{profileUser.location}</span>
+                      <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                      <span className="text-sm sm:text-base truncate">{profileUser.location}</span>
                     </div>
                   )}
                 </div>
                 
                 {profileUser.bio && (
-                  <p className="text-white/90 text-lg mb-6 max-w-2xl">{profileUser.bio}</p>
+                  <p className="text-white/90 text-sm sm:text-base md:text-lg mb-4 sm:mb-6 max-w-2xl break-words">{profileUser.bio}</p>
                 )}
 
                 {/* Enhanced Stats */}
-                <div className="grid grid-cols-3 gap-6 max-w-md">
+                <div className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-6 max-w-md">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleFollowersClick}
-                    className="text-center p-4 bg-white/10 backdrop-blur-sm rounded-2xl hover:bg-white/20 transition-all duration-200"
+                    className="text-center p-3 sm:p-4 bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl hover:bg-white/20 transition-all duration-200"
                   >
-                    <p className="text-2xl font-bold text-white">
+                    <p className="text-xl sm:text-2xl font-bold text-white">
                       {typeof profileUser.followers === 'object' && profileUser.followers?.count !== undefined 
                         ? profileUser.followers.count 
                         : typeof profileUser.followers === 'number' ? profileUser.followers : 0}
                     </p>
-                    <p className="text-sm text-white/80">Followers</p>
+                    <p className="text-xs sm:text-sm text-white/80">Followers</p>
                   </motion.button>
                   
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleFollowingClick}
-                    className="text-center p-4 bg-white/10 backdrop-blur-sm rounded-2xl hover:bg-white/20 transition-all duration-200"
+                    className="text-center p-3 sm:p-4 bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl hover:bg-white/20 transition-all duration-200"
                   >
-                    <p className="text-2xl font-bold text-white">
+                    <p className="text-xl sm:text-2xl font-bold text-white">
                       {typeof profileUser.following === 'object' && profileUser.following?.count !== undefined 
                         ? profileUser.following.count 
                         : typeof profileUser.following === 'number' ? profileUser.following : 0}
                     </p>
-                    <p className="text-sm text-white/80">Following</p>
+                    <p className="text-xs sm:text-sm text-white/80">Following</p>
                   </motion.button>
                   
-                  <div className="text-center p-4 bg-white/10 backdrop-blur-sm rounded-2xl">
-                    <p className="text-2xl font-bold text-white">
+                  <div className="text-center p-3 sm:p-4 bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl">
+                    <p className="text-xl sm:text-2xl font-bold text-white">
                       {profileUser.posts_count || userPosts.length}
                     </p>
-                    <p className="text-sm text-white/80">Posts</p>
+                    <p className="text-xs sm:text-sm text-white/80">Posts</p>
                   </div>
                 </div>
               </div>
@@ -567,32 +614,32 @@ export function PublicProfile() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100"
+          className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden border border-gray-100"
         >
-          <div className="border-b border-gray-100 bg-gray-50/50 px-8 py-6">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                <Eye className="h-4 w-4 text-white" />
+          <div className="border-b border-gray-100 bg-gray-50/50 px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6">
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" />
               </div>
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">
               Posts ({profileUser.posts_count || userPosts.length})
             </h2>
             </div>
           </div>
 
-          <div className="p-8">
+          <div className="p-4 sm:p-6 md:p-8">
             {isLoadingPosts ? (
-              <div className="flex flex-col items-center justify-center py-16">
+              <div className="flex flex-col items-center justify-center py-12 sm:py-16">
                 <div className="relative">
-                  <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 border-3 sm:border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Loader2 className="h-6 w-6 text-blue-500" />
+                    <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 text-blue-500" />
                   </div>
                 </div>
-                <p className="mt-4 text-gray-600 font-medium">Loading posts...</p>
+                <p className="mt-3 sm:mt-4 text-sm sm:text-base text-gray-600 font-medium">Loading posts...</p>
               </div>
             ) : userPosts.length > 0 ? (
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 {userPosts.map((post, index) => (
                   <motion.div
                     key={post.id}
@@ -605,17 +652,17 @@ export function PublicProfile() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16">
-                <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Eye className="h-12 w-12 text-gray-400" />
+              <div className="text-center py-12 sm:py-16 px-4">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                  <Eye className="h-10 w-10 sm:h-12 sm:w-12 text-gray-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3">
                   No posts yet
                 </h3>
-                <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8 max-w-md mx-auto">
                   {profileUser.name || profileUser.fullName} hasn't shared any posts yet. Check back later!
                 </p>
-                {currentUser && currentUser.id !== profileUser.id && (
+                {!isOwnProfile && (
                   <Button
                     onClick={handleMessage}
                     className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"

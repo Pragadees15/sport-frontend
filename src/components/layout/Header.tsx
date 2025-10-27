@@ -76,26 +76,26 @@ export function Header() {
     <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-        className="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50 shadow-sm"
+        className="bg-white/90 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50 shadow-sm"
     >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+        <div className="flex justify-between items-center h-14 sm:h-16">
             {/* Logo and Brand */}
-            <div className="flex items-center space-x-4">
-              <Link to="/dashboard/home" className="flex items-center space-x-2 group">
-                <div className="relative">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                    <Zap className="h-5 w-5 text-white" />
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Link to="/dashboard/home" className="flex items-center space-x-2 group min-w-0">
+                <div className="relative flex-shrink-0">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                    <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                   </div>
             {isConnected && (
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
+                    <div className="absolute -top-1 -right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
                   )}
                 </div>
-                <div className="hidden sm:block">
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <div className="hidden sm:block min-w-0">
+                  <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent truncate">
                     SportsFeed
                   </h1>
-                  <p className="text-xs text-gray-500 -mt-1">Connect. Compete. Excel.</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 -mt-0.5 sm:-mt-1 truncate">Connect. Compete. Excel.</p>
                 </div>
               </Link>
           </div>
@@ -165,7 +165,7 @@ export function Header() {
           </nav>
 
             {/* Right Side Actions */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-2">
 
               {/* Notifications */}
               <NotificationBell />
@@ -175,7 +175,7 @@ export function Header() {
               <div className="relative" ref={userDropdownRef}>
                 <button
                   onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex items-center space-x-1 sm:space-x-2 p-1.5 sm:p-2 rounded-lg hover:bg-gray-50 transition-colors min-h-[44px]"
             >
               <Avatar
                 src={user?.avatar_url}
@@ -185,13 +185,13 @@ export function Header() {
                 userId={user?.id}
                 size="sm"
               />
-                  <div className="hidden sm:block text-left">
-                  <p className="text-sm font-medium text-gray-900">
+                  <div className="hidden md:block text-left min-w-0 max-w-[120px]">
+                  <p className="text-sm font-medium text-gray-900 truncate">
                       {user?.name || user?.fullName}
                     </p>
-                    <p className="text-xs text-gray-500 capitalize">{user?.role}</p>
+                    <p className="text-xs text-gray-500 capitalize truncate">{user?.role}</p>
                   </div>
-                  <ChevronDown className="h-4 w-4 text-gray-400" />
+                  <ChevronDown className="h-4 w-4 text-gray-400 hidden sm:block" />
                 </button>
 
                 {/* User Dropdown Menu */}

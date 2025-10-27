@@ -228,7 +228,7 @@ export function UserProfile() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
         {/* Error State */}
         {error && (
           <motion.div
@@ -273,8 +273,8 @@ export function UserProfile() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
           
-          <div className="relative p-8 md:p-12">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-6 lg:space-y-0 lg:space-x-8">
+          <div className="relative p-4 sm:p-6 md:p-8 lg:p-12">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-4 sm:space-y-6 lg:space-y-0 lg:space-x-8">
               {/* Profile Image with Enhanced Styling */}
               <div className="relative group">
                 <div className="absolute -inset-1 bg-gradient-to-r from-pink-600 to-purple-600 rounded-full opacity-75 group-hover:opacity-100 transition duration-300"></div>
@@ -288,22 +288,28 @@ export function UserProfile() {
               size="xl"
                     className="border-4 border-white shadow-2xl"
             />
-                  <button className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110">
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowEditModal(true)}
+                    className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200"
+                    title="Change profile photo"
+                  >
                     <Camera className="h-4 w-4 text-gray-600" />
-                  </button>
+                  </motion.button>
                 </div>
           </div>
 
           {/* Profile Info */}
-              <div className="flex-1 text-white">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <h1 className="text-3xl md:text-4xl font-bold">{user?.name || user?.fullName}</h1>
+              <div className="flex-1 text-white min-w-0">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-3">
+                  <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold truncate">{user?.name || user?.fullName}</h1>
                     {getVerificationBadge}
                   </div>
                   
                   {/* Enhanced Action Buttons */}
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Button
                         onClick={() => setShowEditModal(true)}
@@ -344,67 +350,67 @@ export function UserProfile() {
                   </div>
             </div>
                 
-                <p className="text-white/90 text-lg mb-2">@{user?.username}</p>
-                <div className="flex items-center space-x-4 text-white/80 mb-4">
+                <p className="text-white/90 text-base sm:text-lg mb-2 truncate">@{user?.username}</p>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 text-white/80 mb-3 sm:mb-4 text-sm sm:text-base">
                   <div className="flex items-center space-x-1">
-                    <Trophy className="h-4 w-4" />
-                    <span className="capitalize font-medium">
+                    <Trophy className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                    <span className="capitalize font-medium truncate">
               {user?.role === 'coach' ? 'Professional Coach' : user?.role === 'aspirant' ? 'Aspiring Athlete' : 'Sports Fan'} 
                     </span>
                   </div>
                   {user?.sports_categories && user.sports_categories.length > 0 && (
                     <div className="flex items-center space-x-1">
-                      <Star className="h-4 w-4" />
-                      <span>{user.sports_categories[0].replace('-', ' ')}</span>
+                      <Star className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                      <span className="truncate">{user.sports_categories[0].replace('-', ' ')}</span>
                     </div>
                   )}
                   {shouldShowLocation(user?.location) && (
                     <div className="flex items-center space-x-1">
-                      <MapPin className="h-4 w-4" />
-                      <span>{user.location}</span>
+                      <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                      <span className="truncate">{user.location}</span>
                     </div>
                   )}
                 </div>
                 
             {user?.bio && (
-                  <p className="text-white/90 text-lg mb-6 max-w-2xl">{user.bio}</p>
+                  <p className="text-white/90 text-sm sm:text-base md:text-lg mb-4 sm:mb-6 max-w-2xl break-words">{user.bio}</p>
                 )}
 
                 {/* Enhanced Stats */}
-                <div className="grid grid-cols-3 gap-6 max-w-md">
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6 max-w-md">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 onClick={handleFollowersClick}
-                    className="text-center p-4 bg-white/10 backdrop-blur-sm rounded-2xl hover:bg-white/20 transition-all duration-200"
+                    className="text-center p-2 sm:p-3 md:p-4 bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl md:rounded-2xl hover:bg-white/20 transition-all duration-200 min-h-[80px] sm:min-h-[100px]"
                 disabled={isLoadingFollowers}
               >
                 {isLoadingFollowers ? (
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto text-white/60 mb-2" />
+                      <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin mx-auto text-white/60 mb-1 sm:mb-2" />
                     ) : (
-                      <p className="text-2xl font-bold text-white">{getNumericCount(user?.followers) || followers.length}</p>
+                      <p className="text-xl sm:text-2xl font-bold text-white">{getNumericCount(user?.followers) || followers.length}</p>
                     )}
-                    <p className="text-sm text-white/80">Followers</p>
+                    <p className="text-xs sm:text-sm text-white/80">Followers</p>
                   </motion.button>
                   
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 onClick={handleFollowingClick}
-                    className="text-center p-4 bg-white/10 backdrop-blur-sm rounded-2xl hover:bg-white/20 transition-all duration-200"
+                    className="text-center p-2 sm:p-3 md:p-4 bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl md:rounded-2xl hover:bg-white/20 transition-all duration-200 min-h-[80px] sm:min-h-[100px]"
                 disabled={isLoadingFollowing}
               >
                 {isLoadingFollowing ? (
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto text-white/60 mb-2" />
+                      <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin mx-auto text-white/60 mb-1 sm:mb-2" />
                     ) : (
-                      <p className="text-2xl font-bold text-white">{getNumericCount(user?.following) || following.length}</p>
+                      <p className="text-xl sm:text-2xl font-bold text-white">{getNumericCount(user?.following) || following.length}</p>
                     )}
-                    <p className="text-sm text-white/80">Following</p>
+                    <p className="text-xs sm:text-sm text-white/80">Following</p>
                   </motion.button>
                   
-                  <div className="text-center p-4 bg-white/10 backdrop-blur-sm rounded-2xl">
-                    <p className="text-2xl font-bold text-white">{userPosts.length}</p>
-                    <p className="text-sm text-white/80">Posts</p>
+                  <div className="text-center p-2 sm:p-3 md:p-4 bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl md:rounded-2xl min-h-[80px] sm:min-h-[100px] flex flex-col justify-center">
+                    <p className="text-xl sm:text-2xl font-bold text-white">{userPosts.length}</p>
+                    <p className="text-xs sm:text-sm text-white/80">Posts</p>
                   </div>
                 </div>
               </div>
@@ -490,19 +496,19 @@ export function UserProfile() {
           className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100"
         >
           {/* Enhanced Tab Headers */}
-          <div className="border-b border-gray-100 bg-gray-50/50">
-            <nav className="flex">
+          <div className="border-b border-gray-100 bg-gray-50/50 overflow-x-auto scrollbar-hide">
+            <nav className="flex min-w-max sm:min-w-0">
               <motion.button
                 whileHover={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}
                 onClick={() => setActiveTab('posts')}
-                className={`relative px-8 py-4 text-sm font-semibold transition-all duration-200 ${
+                className={`relative px-4 sm:px-6 md:px-8 py-3 sm:py-4 text-sm font-semibold transition-all duration-200 whitespace-nowrap ${
                   activeTab === 'posts'
                     ? 'text-blue-600 bg-blue-50'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
               >
-                <div className="flex items-center space-x-2">
-                  <Eye className="h-4 w-4" />
+                <div className="flex items-center space-x-1.5 sm:space-x-2">
+                  <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   <span>Posts ({userPosts.length})</span>
                 </div>
                 {activeTab === 'posts' && (
@@ -516,14 +522,14 @@ export function UserProfile() {
               <motion.button
                 whileHover={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}
                 onClick={() => setActiveTab('shared')}
-                className={`relative px-8 py-4 text-sm font-semibold transition-all duration-200 ${
+                className={`relative px-4 sm:px-6 md:px-8 py-3 sm:py-4 text-sm font-semibold transition-all duration-200 whitespace-nowrap ${
                   activeTab === 'shared'
                     ? 'text-blue-600 bg-blue-50'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
               >
-                <div className="flex items-center space-x-2">
-                  <Share2 className="h-4 w-4" />
+                <div className="flex items-center space-x-1.5 sm:space-x-2">
+                  <Share2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   <span>Shared</span>
             </div>
                 {activeTab === 'shared' && (
@@ -544,7 +550,7 @@ export function UserProfile() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="p-8"
+              className="p-4 sm:p-6 md:p-8"
             >
           {activeTab === 'posts' ? (
             isLoadingPosts ? (

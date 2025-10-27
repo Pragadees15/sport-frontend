@@ -63,10 +63,10 @@ export function PurchaseTokensModal({ onClose, userId }: PurchaseTokensModalProp
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white rounded-2xl shadow-2xl max-w-md w-full"
+        className="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-md w-full"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-t-2xl">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-t-xl sm:rounded-t-2xl">
           <div className="flex items-center space-x-3">
             <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-2 rounded-lg">
               <Coins className="h-6 w-6 text-white" />

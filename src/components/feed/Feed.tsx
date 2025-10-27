@@ -54,21 +54,22 @@ export function Feed() {
       className="max-w-2xl mx-auto"
     >
       {/* Feed Filter */}
-      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-        <div className="flex items-center justify-center space-x-4">
+      <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-4 sm:mb-6">
+        <div className="flex items-center justify-center space-x-2 sm:space-x-4">
           <button
             onClick={() => setFeedFilter('my-sport')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors truncate flex-1 sm:flex-none ${
               feedFilter === 'my-sport'
                 ? 'bg-blue-100 text-blue-700'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            My Sport ({user.sportsCategory ? user.sportsCategory.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Not Set'})
+            <span className="hidden sm:inline">My Sport ({user.sportsCategory ? user.sportsCategory.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Not Set'})</span>
+            <span className="sm:hidden">My Sport</span>
           </button>
           <button
             onClick={() => setFeedFilter('all-sports')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors truncate flex-1 sm:flex-none ${
               feedFilter === 'all-sports'
                 ? 'bg-purple-100 text-purple-700'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -81,10 +82,10 @@ export function Feed() {
       
       <CreatePost onPostCreated={handlePostCreated} />
       
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {loading && (
-          <div className="flex justify-center py-8">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+          <div className="flex justify-center py-6 sm:py-8">
+            <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-b-2 border-blue-600"></div>
           </div>
         )}
         {filteredPosts.map((post) => (
@@ -92,14 +93,14 @@ export function Feed() {
         ))}
       </div>
       
-      {filteredPosts.length === 0 && (
+      {filteredPosts.length === 0 && !loading && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center py-12"
+          className="text-center py-8 sm:py-12 px-4"
         >
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No posts yet</h3>
-          <p className="text-gray-600">
+          <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">No posts yet</h3>
+          <p className="text-sm sm:text-base text-gray-600">
             {feedFilter === 'my-sport' 
               ? `No posts from ${user.sportsCategory ? user.sportsCategory.replace('-', ' ') : 'your sport'} coaches yet.`
               : 'No posts from any sport yet.'

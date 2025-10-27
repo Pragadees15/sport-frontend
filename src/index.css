@@ -13,6 +13,22 @@
     font-family: Inter, sans-serif;
   }
   
+  /* Prevent overscroll/bounce effect */
+  html, body {
+    overscroll-behavior: none;
+  }
+  
+  /* Support for dynamic viewport height */
+  :root {
+    --vh: 1vh;
+  }
+  
+  @supports (height: 100dvh) {
+    :root {
+      --vh: 1dvh;
+    }
+  }
+  
   body {
     font-feature-settings: "cv03", "cv04", "cv11";
   }
@@ -48,5 +64,69 @@
     * {
       -webkit-overflow-scrolling: touch;
     }
+  }
+}
+
+/* Safe area insets for modern devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+  }
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Responsive container improvements */
+@layer utilities {
+  .container-responsive {
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  @media (min-width: 640px) {
+    .container-responsive {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .container-responsive {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  
+  /* Better text truncation */
+  .truncate-2-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .truncate-3-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* Smooth scrolling */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+  }
+  
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }

@@ -262,65 +262,65 @@ export function DiscoverPage() {
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
+        <div className="relative max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-6 sm:pt-8 pb-8 sm:pb-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-12"
           >
-            <div className="inline-flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 mb-6 shadow-lg">
-              <Sparkles className="h-5 w-5 text-yellow-500" />
-              <span className="text-sm font-medium text-gray-700">Discover amazing aspirants</span>
+            <div className="inline-flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 mb-4 sm:mb-6 shadow-lg">
+              <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500" />
+              <span className="text-xs sm:text-sm font-medium text-gray-700">Discover amazing aspirants</span>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-3 sm:mb-4 px-2">
               Discover Sports Community
             </h1>
             
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
               Connect with aspirants, coaches, and sports enthusiasts from around the world
             </p>
             
-            <div className="flex flex-wrap justify-center gap-4">
-              <div className="flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-                <Users className="h-4 w-4 text-blue-500" />
-                <span className="text-sm font-medium text-gray-700">Find Aspirants</span>
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 px-4">
+              <div className="flex items-center space-x-1.5 sm:space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg">
+                <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-500" />
+                <span className="text-xs sm:text-sm font-medium text-gray-700">Find Aspirants</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-                <MapPin className="h-4 w-4 text-green-500" />
-                <span className="text-sm font-medium text-gray-700">Explore Locations</span>
+              <div className="flex items-center space-x-1.5 sm:space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg">
+                <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-green-500" />
+                <span className="text-xs sm:text-sm font-medium text-gray-700">Explore Locations</span>
               </div>
             </div>
           </motion.div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pb-6 sm:pb-8">
         {/* Search and Filter Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 mb-8"
+          className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-6 mb-6 sm:mb-8"
         >
           {/* Search Bar */}
-          <div className="relative mb-6">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <div className="relative mb-4 sm:mb-6">
+            <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Search aspirants, coaches, and locations..."
+              placeholder="Search aspirants, coaches..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+              className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 border border-gray-200 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base md:text-lg"
             />
           </div>
           
           {/* Tabs */}
-          <div className="flex flex-wrap gap-3 mb-6">
+          <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6 overflow-x-auto scrollbar-hide">
             {(['all', 'users', 'locations'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap min-h-[44px] ${
                   activeTab === tab
                     ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform scale-105'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
@@ -332,12 +332,12 @@ export function DiscoverPage() {
           </div>
 
           {/* Filters */}
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-            <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as 'recent' | 'popular' | 'trending')}
-                className="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                className="px-3 sm:px-4 py-2 border border-gray-200 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white min-h-[44px]"
               >
                 <option value="recent">Most Recent</option>
                 <option value="popular">Most Popular</option>
@@ -347,7 +347,7 @@ export function DiscoverPage() {
               <select
                 value={sportsFilter}
                 onChange={(e) => setSportsFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                className="px-3 sm:px-4 py-2 border border-gray-200 rounded-lg sm:rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white min-h-[44px]"
               >
                 <option value="all">All Sports</option>
                 <option value="coco">Coco</option>
@@ -357,18 +357,19 @@ export function DiscoverPage() {
               
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center space-x-2 px-4 py-2 border border-gray-200 rounded-xl text-sm hover:bg-gray-50 transition-colors"
+                className="flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2 border border-gray-200 rounded-lg sm:rounded-xl text-xs sm:text-sm hover:bg-gray-50 transition-colors min-h-[44px]"
               >
-                <Filter className="h-4 w-4" />
-                <span>More Filters</span>
+                <Filter className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">More Filters</span>
+                <span className="sm:hidden">Filters</span>
               </button>
             </div>
             
             <button
               onClick={handleRefresh}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
+              className="flex items-center justify-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg sm:rounded-xl hover:bg-blue-700 transition-colors text-xs sm:text-sm min-h-[44px]"
             >
-              <RefreshCw className="h-4 w-4" />
+              <RefreshCw className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               <span>Refresh</span>
             </button>
           </div>
@@ -421,35 +422,35 @@ export function DiscoverPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8"
+            className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8"
           >
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 text-center">
-              <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl w-fit mx-auto mb-4">
-                <Users className="h-6 w-6 text-white" />
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-3 sm:p-4 md:p-6 text-center">
+              <div className="p-2 sm:p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg sm:rounded-xl w-fit mx-auto mb-2 sm:mb-3 md:mb-4">
+                <Users className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
-              <p className="text-3xl font-bold text-blue-600 mb-2">{stats.total_users}</p>
-              <p className="text-sm text-blue-700 font-medium">Total Users</p>
+              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-blue-600 mb-1 sm:mb-2">{stats.total_users}</p>
+              <p className="text-[10px] sm:text-xs md:text-sm text-blue-700 font-medium">Total Users</p>
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 text-center">
-              <div className="p-3 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl w-fit mx-auto mb-4">
-                <Award className="h-6 w-6 text-white" />
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-3 sm:p-4 md:p-6 text-center">
+              <div className="p-2 sm:p-3 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg sm:rounded-xl w-fit mx-auto mb-2 sm:mb-3 md:mb-4">
+                <Award className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
-              <p className="text-3xl font-bold text-purple-600 mb-2">{stats.coaches}</p>
-              <p className="text-sm text-purple-700 font-medium">Coaches</p>
+              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-600 mb-1 sm:mb-2">{stats.coaches}</p>
+              <p className="text-[10px] sm:text-xs md:text-sm text-purple-700 font-medium">Coaches</p>
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 text-center">
-              <div className="p-3 bg-gradient-to-r from-green-500 to-green-600 rounded-xl w-fit mx-auto mb-4">
-                <Trophy className="h-6 w-6 text-white" />
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-3 sm:p-4 md:p-6 text-center">
+              <div className="p-2 sm:p-3 bg-gradient-to-r from-green-500 to-green-600 rounded-lg sm:rounded-xl w-fit mx-auto mb-2 sm:mb-3 md:mb-4">
+                <Trophy className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
-              <p className="text-3xl font-bold text-green-600 mb-2">{stats.aspirants}</p>
-              <p className="text-sm text-green-700 font-medium">Aspirants</p>
+              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-green-600 mb-1 sm:mb-2">{stats.aspirants}</p>
+              <p className="text-[10px] sm:text-xs md:text-sm text-green-700 font-medium">Aspirants</p>
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 text-center">
-              <div className="p-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl w-fit mx-auto mb-4">
-                <Zap className="h-6 w-6 text-white" />
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-3 sm:p-4 md:p-6 text-center">
+              <div className="p-2 sm:p-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg sm:rounded-xl w-fit mx-auto mb-2 sm:mb-3 md:mb-4">
+                <Zap className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
-              <p className="text-3xl font-bold text-yellow-600 mb-2">{stats.active_users_this_week}</p>
-              <p className="text-sm text-yellow-700 font-medium">Active This Week</p>
+              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-600 mb-1 sm:mb-2">{stats.active_users_this_week}</p>
+              <p className="text-[10px] sm:text-xs md:text-sm text-yellow-700 font-medium">Active This Week</p>
             </div>
           </motion.div>
         )}

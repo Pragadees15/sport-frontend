@@ -118,39 +118,39 @@ export function UserSearchModal({ isOpen, onClose, onStartChat }: UserSearchModa
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col border border-gray-200/50"
+        className="bg-white/95 backdrop-blur-lg rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col border border-gray-200/50"
       >
         {/* Modern Header */}
-        <div className="p-6 border-b border-gray-200/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/50">
+        <div className="p-4 sm:p-6 border-b border-gray-200/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/50">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
-                <MessageCircle className="h-5 w-5 text-white" />
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
               </div>
-              <div>
-                <h2 className="text-xl font-bold text-gray-900">Start New Chat</h2>
-                <p className="text-sm text-gray-600">Find and connect with users</p>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 truncate">Start New Chat</h2>
+                <p className="text-xs sm:text-sm text-gray-600 truncate">Find and connect with users</p>
               </div>
             </div>
             <button
               onClick={handleClose}
-              className="p-3 hover:bg-gray-100 rounded-xl transition-all duration-200"
+              className="p-2 sm:p-3 hover:bg-gray-100 rounded-xl transition-all duration-200 flex-shrink-0"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
           </div>
         </div>
 
         {/* Modern Search Input */}
-        <div className="p-6 border-b border-gray-200/50">
+        <div className="p-4 sm:p-6 border-b border-gray-200/50">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search users by name, email, or bio..."
-              className="w-full pl-12 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:bg-white transition-all duration-200"
+              placeholder="Search users..."
+              className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 bg-gray-50/50 border border-gray-200 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 focus:bg-white transition-all duration-200 text-sm sm:text-base"
               autoFocus
             />
           </div>

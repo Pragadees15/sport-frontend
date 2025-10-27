@@ -158,34 +158,34 @@ export function VerificationPortal() {
           <div className="absolute top-1/2 left-1/2 w-60 h-60 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
         </div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          className="relative z-10 max-w-7xl mx-auto px-4 py-8"
-        >
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        className="relative z-10 max-w-7xl mx-auto px-4 py-6 sm:py-8"
+      >
           {/* Enhanced Verified User Hero Section */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 sm:mb-12">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="relative inline-flex items-center justify-center w-32 h-32 bg-gradient-to-r from-green-600 to-blue-600 rounded-full mb-8 shadow-2xl"
+              className="relative inline-flex items-center justify-center w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-r from-green-600 to-blue-600 rounded-full mb-6 sm:mb-8 shadow-2xl"
             >
-              <CheckCircle2 className="h-16 w-16 text-white" />
+              <CheckCircle2 className="h-12 w-12 sm:h-16 sm:w-16 text-white" />
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.5 }}
-                className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg"
+                className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg"
               >
-                <Star className="h-5 w-5 text-white" />
+                <Star className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
               </motion.div>
             </motion.div>
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-5xl font-bold text-gray-900 mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-4"
             >
               🎉 Congratulations! You're Verified
             </motion.h1>
@@ -193,7 +193,7 @@ export function VerificationPortal() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
+              className="text-base sm:text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4"
             >
               Your <span className="font-semibold text-green-600 capitalize">{roleForRequest}</span> verification has been approved. 
               Enjoy your verified status and unlock exclusive features!
@@ -201,20 +201,20 @@ export function VerificationPortal() {
           </div>
 
           {/* Verified User Status Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white"
+              className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6 text-white"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-green-100 text-sm font-medium">Verification Status</p>
-                  <p className="text-2xl font-bold">Verified ✓</p>
+                  <p className="text-green-100 text-xs sm:text-sm font-medium">Verification Status</p>
+                  <p className="text-xl sm:text-2xl font-bold">Verified ✓</p>
                 </div>
-                <div className="p-3 bg-white bg-opacity-20 rounded-full">
-                  <CheckCircle2 className="h-6 w-6" />
+                <div className="p-2 sm:p-3 bg-white bg-opacity-20 rounded-full">
+                  <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
               </div>
             </motion.div>
@@ -223,15 +223,15 @@ export function VerificationPortal() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6 text-white"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-blue-100 text-sm font-medium">Verified Role</p>
-                  <p className="text-2xl font-bold capitalize">{roleForRequest}</p>
+                  <p className="text-blue-100 text-xs sm:text-sm font-medium">Verified Role</p>
+                  <p className="text-xl sm:text-2xl font-bold capitalize">{roleForRequest}</p>
                 </div>
-                <div className="p-3 bg-white bg-opacity-20 rounded-full">
-                  <Award className="h-6 w-6" />
+                <div className="p-2 sm:p-3 bg-white bg-opacity-20 rounded-full">
+                  <Award className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
               </div>
             </motion.div>
@@ -240,20 +240,20 @@ export function VerificationPortal() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white"
+              className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6 text-white"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-purple-100 text-sm font-medium">Verification Date</p>
-                  <p className="text-2xl font-bold">
+                  <p className="text-purple-100 text-xs sm:text-sm font-medium">Verification Date</p>
+                  <p className="text-lg sm:text-2xl font-bold">
                     {verificationHistory.length > 0 ? 
                       new Date(verificationHistory[0].reviewed_at || verificationHistory[0].created_at).toLocaleDateString() : 
                       'Recently'
                     }
                   </p>
                 </div>
-                <div className="p-3 bg-white bg-opacity-20 rounded-full">
-                  <Star className="h-6 w-6" />
+                <div className="p-2 sm:p-3 bg-white bg-opacity-20 rounded-full">
+                  <Star className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
               </div>
             </motion.div>
@@ -264,34 +264,34 @@ export function VerificationPortal() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden mb-8"
+            className="bg-white rounded-lg sm:rounded-xl shadow-lg border border-gray-100 overflow-hidden mb-6 sm:mb-8"
           >
-            <div className="bg-gradient-to-r from-green-600 to-blue-600 p-6 text-white">
-              <div className="flex items-center space-x-3">
-                <Award className="h-8 w-8" />
+            <div className="bg-gradient-to-r from-green-600 to-blue-600 p-4 sm:p-6 text-white">
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <Award className="h-6 w-6 sm:h-8 sm:w-8" />
                 <div>
-                  <h2 className="text-2xl font-bold">Verified User Benefits</h2>
-                  <p className="text-green-100">Unlock exclusive features and privileges</p>
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold">Verified User Benefits</h2>
+                  <p className="text-xs sm:text-sm text-green-100">Unlock exclusive features and privileges</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="text-center p-4 bg-green-50 rounded-lg">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Shield className="h-6 w-6 text-green-600" />
+            <div className="p-4 sm:p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <div className="text-center p-3 sm:p-4 bg-green-50 rounded-lg">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                    <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Verified Badge</h3>
-                  <p className="text-sm text-gray-600">Display your verified status</p>
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1 sm:mb-2">Verified Badge</h3>
+                  <p className="text-xs sm:text-sm text-gray-600">Display your verified status</p>
                 </div>
 
-                <div className="text-center p-4 bg-blue-50 rounded-lg">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Star className="h-6 w-6 text-blue-600" />
+                <div className="text-center p-3 sm:p-4 bg-blue-50 rounded-lg">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                    <Star className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Enhanced Credibility</h3>
-                  <p className="text-sm text-gray-600">Build trust with other users</p>
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1 sm:mb-2">Enhanced Credibility</h3>
+                  <p className="text-xs sm:text-sm text-gray-600">Build trust with other users</p>
                 </div>
               </div>
             </div>
@@ -360,25 +360,25 @@ export function VerificationPortal() {
             transition={{ delay: 1.0 }}
             className="text-center"
           >
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-8 border border-green-100">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">What's Next?</h3>
-              <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg sm:rounded-xl p-4 sm:p-6 md:p-8 border border-green-100">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">What's Next?</h3>
+              <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 max-w-2xl mx-auto">
                 You're all set! Your verified status gives you access to exclusive features and helps you build credibility in the community.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                 <Button 
-                  className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+                  className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-sm sm:text-base"
                   onClick={() => navigate('/dashboard/profile')}
                 >
-                  <Eye className="h-4 w-4 mr-2" />
+                  <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                   View Your Profile
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="border-blue-300 text-blue-700 hover:bg-blue-50"
+                  className="border-blue-300 text-blue-700 hover:bg-blue-50 text-sm sm:text-base"
                   onClick={() => navigate('/dashboard')}
                 >
-                  <Award className="h-4 w-4 mr-2" />
+                  <Award className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                   Go to Dashboard
                 </Button>
               </div>
@@ -402,31 +402,31 @@ export function VerificationPortal() {
       <motion.div 
         initial={{ opacity: 0, y: 20 }} 
         animate={{ opacity: 1, y: 0 }} 
-        className="relative z-10 max-w-7xl mx-auto px-4 py-8"
+        className="relative z-10 max-w-7xl mx-auto px-4 py-6 sm:py-8"
       >
         {/* Enhanced Hero Section */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="relative inline-flex items-center justify-center w-24 h-24 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-8 shadow-2xl"
+            className="relative inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-6 sm:mb-8 shadow-2xl"
           >
-            <Shield className="h-12 w-12 text-white" />
+            <Shield className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.5 }}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg"
+              className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg"
             >
-              <CheckCircle className="h-3 w-3 text-white" />
+              <CheckCircle className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white" />
             </motion.div>
           </motion.div>
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-5xl font-bold text-gray-900 mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-4"
           >
             Verification Portal
           </motion.h1>
@@ -434,27 +434,27 @@ export function VerificationPortal() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
+            className="text-base sm:text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4"
           >
             Get verified as a <span className="font-semibold text-blue-600 capitalize">{roleForRequest}</span> by uploading your credentials and documents
           </motion.p>
         </div>
 
         {/* Status Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white rounded-xl shadow-lg p-6 border border-gray-100"
+            className="bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6 border border-gray-100"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Current Role</p>
-                <p className="text-2xl font-bold text-gray-900 capitalize">{user?.role}</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Current Role</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900 capitalize">{user?.role}</p>
               </div>
-              <div className="p-3 bg-blue-100 rounded-full">
-                <Award className="h-6 w-6 text-blue-600" />
+              <div className="p-2 sm:p-3 bg-blue-100 rounded-full">
+                <Award className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
               </div>
             </div>
           </motion.div>

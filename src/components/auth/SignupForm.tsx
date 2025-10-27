@@ -199,30 +199,30 @@ export function SignupForm({ onSignupSuccess }: SignupFormProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="space-y-6"
+      className="space-y-4 sm:space-y-6"
     >
       {/* Header */}
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-3 sm:space-y-4">
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl mb-4 shadow-lg"
+          className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl sm:rounded-2xl mb-2 sm:mb-4 shadow-lg"
         >
-          <Star className="h-8 w-8 text-white" />
+          <Star className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
         </motion.div>
         
-        <div className="space-y-2">
-          <h2 className="text-3xl font-bold text-gray-900">{getStepTitle()}</h2>
-          <p className="text-gray-600 text-lg">{getStepDescription()}</p>
+        <div className="space-y-1 sm:space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 px-4">{getStepTitle()}</h2>
+          <p className="text-gray-600 text-sm sm:text-base md:text-lg px-4">{getStepDescription()}</p>
         </div>
       </div>
 
       {/* Progress Steps */}
-      <div className="flex items-center justify-center space-x-4 mb-6">
+      <div className="flex items-center justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6 overflow-x-auto px-4">
         {['role', 'details', 'preferences', 'emergency', 'account'].map((step, index) => (
-          <div key={step} className="flex items-center">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+          <div key={step} className="flex items-center flex-shrink-0">
+            <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium transition-all duration-300 ${
               currentStep === step 
                 ? 'bg-blue-600 text-white shadow-lg' 
                 : ['role', 'details', 'preferences', 'emergency', 'account'].indexOf(currentStep) > index
@@ -230,13 +230,13 @@ export function SignupForm({ onSignupSuccess }: SignupFormProps) {
                 : 'bg-gray-200 text-gray-500'
             }`}>
               {['role', 'details', 'preferences', 'emergency', 'account'].indexOf(currentStep) > index ? (
-                <CheckCircle className="h-4 w-4" />
+                <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4" />
               ) : (
                 index + 1
               )}
             </div>
             {index < 4 && (
-              <div className={`w-8 h-0.5 mx-2 transition-all duration-300 ${
+              <div className={`w-4 sm:w-8 h-0.5 mx-1 sm:mx-2 transition-all duration-300 ${
                 ['role', 'details', 'preferences', 'emergency', 'account'].indexOf(currentStep) > index
                   ? 'bg-green-500'
                   : 'bg-gray-200'
@@ -256,27 +256,27 @@ export function SignupForm({ onSignupSuccess }: SignupFormProps) {
           transition={{ duration: 0.3 }}
         >
           {currentStep === 'role' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-4 sm:space-y-6">
+              <div className="grid grid-cols-1 gap-3 sm:gap-4">
                 {roleOptions.map((option) => (
                   <motion.div
                     key={option.id}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleRoleSelect(option.id as any)}
-                    className={`p-6 border-2 rounded-2xl cursor-pointer transition-all duration-300 ${
+                    className={`p-4 sm:p-6 border-2 rounded-xl sm:rounded-2xl cursor-pointer transition-all duration-300 ${
                       selectedRole === option.id
                         ? `border-blue-500 bg-blue-50 shadow-md`
                         : 'border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300'
                     }`}
                   >
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${option.color} flex items-center justify-center`}>
-                        <option.icon className="h-6 w-6 text-white" />
+                    <div className="flex items-center space-x-3 sm:space-x-4">
+                      <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-r ${option.color} flex items-center justify-center flex-shrink-0`}>
+                        <option.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-lg">{option.title}</h3>
-                        <p className="text-gray-600 text-sm">{option.description}</p>
+                        <h3 className="font-semibold text-gray-900 text-base sm:text-lg">{option.title}</h3>
+                        <p className="text-gray-600 text-xs sm:text-sm">{option.description}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -286,14 +286,14 @@ export function SignupForm({ onSignupSuccess }: SignupFormProps) {
           )}
 
           {currentStep === 'details' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-4 sm:space-y-6">
+              <div className="grid grid-cols-1 gap-3 sm:gap-4">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Full Name</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Full Name</label>
                   <input
                     {...register('name')}
                     placeholder="Enter your full name"
-                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base bg-white border border-gray-300 rounded-lg sm:rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                   />
                   {errors.name && (
                     <motion.p 
@@ -432,8 +432,8 @@ export function SignupForm({ onSignupSuccess }: SignupFormProps) {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Gender Identity</label>
-                <div className="grid grid-cols-2 gap-3">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700">Gender Identity</label>
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   {[
                     { value: 'male', label: 'Male' },
                     { value: 'female', label: 'Female' },
@@ -449,7 +449,7 @@ export function SignupForm({ onSignupSuccess }: SignupFormProps) {
                         setSelectedGender(option.value as any);
                         setValue('gender', option.value as any);
                       }}
-                      className={`p-3 border-2 rounded-xl text-sm font-medium transition-all ${
+                      className={`p-2 sm:p-3 border-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all ${
                         selectedGender === option.value
                           ? 'border-blue-500 bg-blue-50 text-blue-700'
                           : 'border-gray-200 bg-white hover:bg-gray-50 text-gray-700'
@@ -681,19 +681,20 @@ export function SignupForm({ onSignupSuccess }: SignupFormProps) {
       </AnimatePresence>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pt-2">
         <motion.button
           type="button"
           onClick={prevStep}
           disabled={currentStep === 'role'}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-200 ${
+          className={`flex items-center space-x-1 sm:space-x-2 px-3 py-2 sm:px-4 sm:py-2 text-sm sm:text-base rounded-lg sm:rounded-xl transition-all duration-200 ${
             currentStep === 'role'
               ? 'opacity-50 cursor-not-allowed text-gray-400'
               : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
           }`}
         >
-          <ArrowLeft className="h-4 w-4" />
-          <span>Previous</span>
+          <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4" />
+          <span className="hidden sm:inline">Previous</span>
+          <span className="sm:hidden">Prev</span>
         </motion.button>
 
         {currentStep === 'account' ? (
@@ -701,17 +702,19 @@ export function SignupForm({ onSignupSuccess }: SignupFormProps) {
             type="button"
             onClick={handleSubmit(onSubmit)}
             disabled={isLoading}
-            className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center space-x-1 sm:space-x-2 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                <span>Creating Account...</span>
+                <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <span className="hidden sm:inline">Creating Account...</span>
+                <span className="sm:hidden">Creating...</span>
               </>
             ) : (
               <>
-                <span>Create Account</span>
-                <ArrowRight className="h-4 w-4" />
+                <span className="hidden sm:inline">Create Account</span>
+                <span className="sm:hidden">Create</span>
+                <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
               </>
             )}
           </motion.button>
@@ -719,10 +722,10 @@ export function SignupForm({ onSignupSuccess }: SignupFormProps) {
           <motion.button
             type="button"
             onClick={nextStep}
-            className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="flex items-center space-x-1 sm:space-x-2 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <span>Next</span>
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
           </motion.button>
         )}
       </div>

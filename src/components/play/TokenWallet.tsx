@@ -19,18 +19,18 @@ export function TokenWallet({ tokens }: TokenWalletProps) {
 
   return (
     <>
-      <div className="bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 rounded-2xl p-6 text-white shadow-xl border border-white/20 min-w-[320px]">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-white/20 rounded-xl">
-              <Coins className="h-6 w-6" />
+      <div className="bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white shadow-xl border border-white/20 min-w-[280px] sm:min-w-[320px]">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
+          <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
+            <div className="p-1.5 sm:p-2 bg-white/20 rounded-lg sm:rounded-xl flex-shrink-0">
+              <Coins className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
-            <div>
-              <h3 className="font-bold text-lg">Token Wallet</h3>
-              <p className="text-blue-100 text-sm">Your digital currency</p>
+            <div className="min-w-0">
+              <h3 className="font-bold text-base sm:text-lg truncate">Token Wallet</h3>
+              <p className="text-blue-100 text-xs sm:text-sm truncate">Your digital currency</p>
             </div>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex space-x-1.5 sm:space-x-2 flex-shrink-0">
             <button
               onClick={() => setShowPurchaseModal(true)}
               className="bg-white/20 hover:bg-white/30 rounded-full p-2 transition-all hover:scale-110"

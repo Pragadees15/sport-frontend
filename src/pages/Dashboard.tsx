@@ -52,29 +52,29 @@ export function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center max-w-md mx-auto p-8"
         >
-          <div className="relative mb-8">
-            <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto shadow-lg">
-              <Loader2 className="h-8 w-8 text-white animate-spin" />
+          <div className="relative mb-6 sm:mb-8">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto shadow-lg">
+              <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 text-white animate-spin" />
             </div>
-            <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-              <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+            <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded-full flex items-center justify-center">
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
             </div>
           </div>
           
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Loading Dashboard</h2>
-          <p className="text-gray-600 mb-6">Please wait while we prepare your personalized experience.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-4">Loading Dashboard</h2>
+          <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 px-4">Please wait while we prepare your personalized experience.</p>
           
-          <div className="space-y-3">
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+          <div className="space-y-2 sm:space-y-3 px-4">
+            <div className="flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-500">
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-pulse"></div>
               <span>Initializing user session</span>
             </div>
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+            <div className="flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-500">
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-purple-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
               <span>Loading your preferences</span>
             </div>
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+            <div className="flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-500">
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
               <span>Connecting to services</span>
             </div>
           </div>
@@ -91,29 +91,29 @@ export function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center max-w-md mx-auto p-8"
         >
-          <div className="relative mb-8">
-            <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto shadow-lg">
-              <Loader2 className="h-8 w-8 text-white animate-spin" />
+          <div className="relative mb-6 sm:mb-8">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto shadow-lg">
+              <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 text-white animate-spin" />
             </div>
-            <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
-              <Wifi className="h-3 w-3 text-white" />
+            <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-yellow-500 rounded-full flex items-center justify-center">
+              <Wifi className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white" />
             </div>
           </div>
           
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Connecting...</h2>
-          <p className="text-gray-600 mb-6">Establishing secure connection to our services.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-4">Connecting...</h2>
+          <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 px-4">Establishing secure connection to our services.</p>
           
-          <div className="space-y-3">
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+          <div className="space-y-2 sm:space-y-3 px-4">
+            <div className="flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-500">
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-pulse"></div>
               <span>Authenticating user</span>
             </div>
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+            <div className="flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-500">
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-purple-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
               <span>Establishing real-time connection</span>
             </div>
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+            <div className="flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-500">
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
               <span>Loading dashboard</span>
             </div>
           </div>
@@ -130,21 +130,21 @@ export function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center max-w-md mx-auto p-8"
         >
-          <div className="relative mb-8">
-            <div className="w-20 h-20 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center mx-auto shadow-lg">
-              <WifiOff className="h-8 w-8 text-white" />
+          <div className="relative mb-6 sm:mb-8">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center mx-auto shadow-lg">
+              <WifiOff className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </div>
-            <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-              <AlertCircle className="h-3 w-3 text-white" />
+            <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-red-500 rounded-full flex items-center justify-center">
+              <AlertCircle className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white" />
             </div>
           </div>
           
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Connection Error</h2>
-          <p className="text-gray-600 mb-6">We're having trouble connecting to our services. Please try again.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-4">Connection Error</h2>
+          <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 px-4">We're having trouble connecting to our services. Please try again.</p>
           
           <button 
             onClick={() => window.location.reload()}
-            className="px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg hover:from-red-600 hover:to-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white text-sm sm:text-base rounded-lg hover:from-red-600 hover:to-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             Retry Connection
           </button>

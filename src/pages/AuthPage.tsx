@@ -97,9 +97,9 @@ export function AuthPage() {
         <div className="absolute top-40 left-1/2 w-80 h-80 bg-cyan-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
       </div>
 
-      <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-3 sm:p-4 md:p-6">
         <div className="w-full max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
             {/* Left Side - Branding */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -121,14 +121,14 @@ export function AuthPage() {
                   <span className="text-2xl font-bold text-gray-900">SportsFeed</span>
                 </motion.div>
 
-                <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                   Welcome to{' '}
                   <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent">
                     SportsFeed
                   </span>
                 </h1>
                 
-                <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
+                <p className="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl">
                   The ultimate platform for athletes, coaches, and sports enthusiasts. 
                   Connect, learn, and grow together in a verified community.
                 </p>
@@ -151,7 +151,7 @@ export function AuthPage() {
               </div>
 
               {/* Features Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {features.map((feature, index) => (
                   <motion.div
                     key={feature.title}
@@ -159,14 +159,14 @@ export function AuthPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 * index }}
                     whileHover={{ scale: 1.02, y: -2 }}
-                    className="group flex items-start space-x-3 bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-gray-200 hover:bg-white/80 hover:border-gray-300 transition-all duration-300 shadow-sm hover:shadow-md"
+                    className="group flex items-start space-x-2 sm:space-x-3 bg-white/60 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-gray-200 hover:bg-white/80 hover:border-gray-300 transition-all duration-300 shadow-sm hover:shadow-md"
                   >
-                    <div className={`p-2 rounded-lg ${feature.bgColor} group-hover:scale-110 transition-transform duration-200`}>
-                      <feature.icon className={`h-5 w-5 ${feature.color}`} />
+                    <div className={`p-1.5 sm:p-2 rounded-lg ${feature.bgColor} group-hover:scale-110 transition-transform duration-200 flex-shrink-0`}>
+                      <feature.icon className={`h-4 w-4 sm:h-5 sm:w-5 ${feature.color}`} />
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 text-sm mb-1">{feature.title}</h3>
-                      <p className="text-gray-600 text-xs leading-relaxed">{feature.description}</p>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 text-xs sm:text-sm mb-0.5 sm:mb-1 truncate">{feature.title}</h3>
+                      <p className="text-gray-600 text-[10px] sm:text-xs leading-relaxed">{feature.description}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -181,7 +181,7 @@ export function AuthPage() {
               className="relative"
             >
               {/* Auth Form Container */}
-              <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-8 relative overflow-hidden">
+              <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-200 p-5 sm:p-6 md:p-8 relative overflow-hidden">
                 {/* Step indicator */}
                 <div className="flex items-center justify-center mb-8">
                   <div className="flex items-center space-x-2 bg-gray-100 rounded-full p-1">

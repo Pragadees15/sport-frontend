@@ -132,37 +132,37 @@ export function HomePage() {
               <span className="text-sm font-medium text-gray-700">Welcome to your sports hub</span>
             </div>
             
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 break-words text-center">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 break-words text-center px-4">
               <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent inline-block">
                 Welcome back, {user.name || user.fullName}!
               </span>
-              <span className="ml-2 text-3xl emoji inline-block" role="img" aria-label="waving hand">👋</span>
+              <span className="ml-2 text-2xl sm:text-3xl emoji inline-block" role="img" aria-label="waving hand">👋</span>
             </h1>
             
-            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-8 break-words">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-6 sm:mb-8 break-words px-4">
               Ready to connect with your {user.sports_categories?.[0] ? user.sports_categories[0].replace('-', ' ') : 'sports'} community and achieve your goals?
             </p>
             
-            <div className="flex flex-wrap justify-center gap-4">
-              <div className="flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-                <Target className="h-4 w-4 text-green-500" />
-                <span className="text-sm font-medium text-gray-700">Track Progress</span>
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 px-4">
+              <div className="flex items-center space-x-1.5 sm:space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg">
+                <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-green-500 flex-shrink-0" />
+                <span className="text-xs sm:text-sm font-medium text-gray-700">Track Progress</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-                <Users className="h-4 w-4 text-blue-500" />
-                <span className="text-sm font-medium text-gray-700">Connect with Athletes</span>
+              <div className="flex items-center space-x-1.5 sm:space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg">
+                <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-500 flex-shrink-0" />
+                <span className="text-xs sm:text-sm font-medium text-gray-700 truncate">Connect with Athletes</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-                <Trophy className="h-4 w-4 text-yellow-500" />
-                <span className="text-sm font-medium text-gray-700">Achieve Goals</span>
+              <div className="flex items-center space-x-1.5 sm:space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg">
+                <Trophy className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-yellow-500 flex-shrink-0" />
+                <span className="text-xs sm:text-sm font-medium text-gray-700">Achieve Goals</span>
               </div>
             </div>
           </motion.div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 lg:gap-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pb-6 sm:pb-8">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Sidebar - Desktop Only */}
           <div className="hidden xl:block xl:col-span-3 space-y-6">
             <motion.div
@@ -182,29 +182,29 @@ export function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6"
+              className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-6"
             >
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
-                    <Rss className="h-5 w-5 text-white" />
+              <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
+                <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
+                  <div className="p-1.5 sm:p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex-shrink-0">
+                    <Rss className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                   </div>
-                  <h2 className="text-xl font-bold text-gray-900">Your Feed</h2>
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 truncate">Your Feed</h2>
                 </div>
                 <button
                   onClick={handleRefresh}
                   disabled={refreshing}
-                  className="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium text-gray-700 transition-colors disabled:opacity-50"
+                  className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium text-gray-700 transition-colors disabled:opacity-50 min-h-[44px] flex-shrink-0"
                 >
                   <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
                   <span className="hidden sm:inline">Refresh</span>
                 </button>
               </div>
               
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 <button
                   onClick={() => setFeedFilter('my-sport')}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 min-h-[44px] ${
                     feedFilter === 'my-sport'
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform scale-105'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
@@ -215,7 +215,7 @@ export function HomePage() {
                 </button>
                 <button
                   onClick={() => setFeedFilter('following')}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 min-h-[44px] ${
                     feedFilter === 'following'
                       ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg transform scale-105'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
@@ -225,7 +225,7 @@ export function HomePage() {
                 </button>
                 <button
                   onClick={() => setFeedFilter('all-sports')}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 min-h-[44px] ${
                     feedFilter === 'all-sports'
                       ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg transform scale-105'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'

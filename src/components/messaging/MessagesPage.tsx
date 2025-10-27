@@ -285,16 +285,56 @@ export function MessagesPage() {
 
 
 
+  // Prevent body scroll when chat is open on mobile
+  useEffect(() => {
+    if (isMobile && selectedConversationId) {
+      // Store original values
+      const originalOverflow = document.body.style.overflow;
+      const originalPosition = document.body.style.position;
+      const originalTop = document.body.style.top;
+      const scrollY = window.scrollY;
+      
+      // Lock scroll
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      
+      // Also lock on html element
+      document.documentElement.style.overflow = 'hidden';
+      
+      return () => {
+        // Restore scroll
+        document.body.style.overflow = originalOverflow;
+        document.body.style.position = originalPosition;
+        document.body.style.top = originalTop;
+        document.body.style.width = '';
+        document.documentElement.style.overflow = '';
+        
+        // Restore scroll position
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isMobile, selectedConversationId]);
+
   // Mobile view: show either conversation list or messaging interface
   if (isMobile) {
     if (selectedConversationId) {
       return (
         <motion.div 
-          className="h-screen"
+          className="fixed inset-0 z-[100] bg-white overflow-hidden"
           initial={{ opacity: 0, x: 300 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 300 }}
           transition={{ duration: 0.3 }}
+          style={{ 
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: '100dvh', // Dynamic viewport height for mobile browsers (falls back to 100vh)
+          }}
         >
           <MessagingInterface
             conversationId={selectedConversationId}
@@ -306,7 +346,7 @@ export function MessagesPage() {
     }
 
     return (
-      <div className="h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 pb-20">
         {/* Compact User Profile Section - Mobile - Fixed */}
         <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm">
           <div className="p-3">
@@ -401,9 +441,9 @@ export function MessagesPage() {
 
   // Desktop view: side-by-side layout
   return (
-    <div className="h-screen flex bg-gradient-to-br from-gray-50 to-blue-50">
+    <div className="h-[calc(100vh-64px)] flex bg-gradient-to-br from-gray-50 to-blue-50 overflow-hidden">
       {/* Modern Sidebar */}
-      <div className="w-80 bg-white/80 backdrop-blur-lg border-r border-gray-200/50 shadow-xl flex flex-col">
+      <div className="w-80 bg-white/80 backdrop-blur-lg border-r border-gray-200/50 shadow-xl flex flex-col overflow-hidden">
         {/* Compact User Profile Section - Fixed */}
         <div className="sticky top-0 z-10 p-3 border-b border-gray-200/50 bg-gradient-to-r from-blue-50/30 to-indigo-50/30">
           <div className="flex items-center space-x-3">
@@ -481,7 +521,7 @@ export function MessagesPage() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="flex-1 overflow-hidden">
         {selectedConversationId ? (
           <MessagingInterface 
             conversationId={selectedConversationId} 

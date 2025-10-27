@@ -15,9 +15,11 @@ import {
   Users,
   Zap,
   RefreshCw,
-  Eye
+  Eye,
+  ArrowLeft
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/authStore';
 import { apiService } from '../../../services/api';
 import { socketService } from '../../../services/socket';
@@ -28,19 +30,28 @@ import toast from 'react-hot-toast';
 interface Notification {
   id: string;
   user_id: string;
-  type: 'message' | 'like' | 'comment' | 'follow' | 'event' | 'achievement' | 'location' | 'system';
+  type: 'like' | 'comment' | 'follow' | 'message' | 'post' | 'share' | 'mention' | 'system' | 'event' | 'achievement' | 'location';
   title: string;
   message: string;
   data?: any;
   is_read: boolean;
   action_url?: string;
+  read_at?: string;
   created_at: string;
-  updated_at: string;
+  updated_at?: string;
+  from_user?: {
+    id: string;
+    name: string;
+    avatar_url?: string;
+    role: string;
+    is_verified: boolean;
+  };
   sender?: {
     id: string;
     name: string;
     avatar_url?: string;
     role: string;
+    is_verified?: boolean;
   };
 }
 
@@ -48,6 +59,7 @@ type FilterType = 'all' | 'unread' | 'message' | 'like' | 'follow' | 'event' | '
 
 export function NotificationsPage() {
   const { user } = useAuthStore();
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterType>('all');
@@ -169,6 +181,14 @@ export function NotificationsPage() {
         return <Trophy className="h-5 w-5 text-yellow-600" />;
       case 'location':
         return <MapPin className="h-5 w-5 text-orange-600" />;
+      case 'post':
+        return <Bell className="h-5 w-5 text-blue-600" />;
+      case 'share':
+        return <RefreshCw className="h-5 w-5 text-purple-600" />;
+      case 'mention':
+        return <Users className="h-5 w-5 text-indigo-600" />;
+      case 'system':
+        return <Settings className="h-5 w-5 text-gray-600" />;
       default:
         return <Bell className="h-5 w-5 text-gray-600" />;
     }
@@ -369,6 +389,17 @@ export function NotificationsPage() {
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10"></div>
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
+          {/* Back Button */}
+          <motion.button
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={() => navigate('/dashboard/home')}
+            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-6 group transition-all duration-200"
+          >
+            <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
+            <span className="font-medium">Back to Home</span>
+          </motion.button>
+
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -622,16 +653,22 @@ export function NotificationsPage() {
                   />
                   
                   <div className="flex-shrink-0">
-                    {notification.sender ? (
+                    {(notification.sender || notification.from_user) ? (
                       <div className="relative">
                         <Avatar
-                          src={notification.sender.avatar_url}
-                          alt={notification.sender.name}
-                          name={notification.sender.name}
+                          src={notification.sender?.avatar_url || notification.from_user?.avatar_url}
+                          alt={notification.sender?.name || notification.from_user?.name || 'User'}
+                          name={notification.sender?.name || notification.from_user?.name || 'User'}
                           size="md"
                         />
-                        {(notification as any).sender?.is_verified && (
-                          <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center ${((notification as any).sender.role === 'admin' || (notification as any).sender.role === 'administrator') ? 'bg-orange-500' : ((notification as any).sender.role === 'coach' ? 'bg-violet-500' : ((notification as any).sender.role === 'aspirant' ? 'bg-blue-500' : 'bg-blue-500'))}`}>
+                        {(notification.sender?.is_verified || notification.from_user?.is_verified) && (
+                          <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center ${
+                            (notification.sender?.role === 'admin' || notification.sender?.role === 'administrator' || notification.from_user?.role === 'admin' || notification.from_user?.role === 'administrator') 
+                              ? 'bg-orange-500' 
+                              : (notification.sender?.role === 'coach' || notification.from_user?.role === 'coach') 
+                                ? 'bg-violet-500' 
+                                : 'bg-blue-500'
+                          }`}>
                             <div className="w-2 h-2 bg-white rounded-full"></div>
                           </div>
                         )}

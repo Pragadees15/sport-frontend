@@ -1549,6 +1549,79 @@ class ApiService {
     return this.handleResponse<{ stats: any; generated_at: string }>(response);
   }
 
+  // AI endpoints
+  async moderateContent(content: string): Promise<{ success: boolean; moderation: any }> {
+    const response = await fetch(`${API_BASE_URL}/ai/moderate`, {
+      method: 'POST',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify({ content }),
+    });
+    return this.handleResponse<{ success: boolean; moderation: any }>(response);
+  }
+
+  async detectLanguage(text: string): Promise<{ success: boolean; detection: any }> {
+    const response = await fetch(`${API_BASE_URL}/ai/detect-language`, {
+      method: 'POST',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify({ text }),
+    });
+    return this.handleResponse<{ success: boolean; detection: any }>(response);
+  }
+
+  async translateText(text: string, targetLanguage: string, sourceLanguage?: string): Promise<{ success: boolean; translation: any }> {
+    const response = await fetch(`${API_BASE_URL}/ai/translate`, {
+      method: 'POST',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify({ text, targetLanguage, sourceLanguage }),
+    });
+    return this.handleResponse<{ success: boolean; translation: any }>(response);
+  }
+
+  async discoverAthletes(params?: {
+    limit?: number;
+    minTalentScore?: number;
+    sportsCategory?: string;
+    location?: string;
+    radius?: number;
+  }): Promise<{ success: boolean; athletes: any[]; total: number }> {
+    const queryParams = new URLSearchParams();
+    if (params?.limit) queryParams.set('limit', params.limit.toString());
+    if (params?.minTalentScore) queryParams.set('minTalentScore', params.minTalentScore.toString());
+    if (params?.sportsCategory) queryParams.set('sportsCategory', params.sportsCategory);
+    if (params?.location) queryParams.set('location', params.location);
+    if (params?.radius) queryParams.set('radius', params.radius.toString());
+
+    const response = await fetch(`${API_BASE_URL}/ai/discover-athletes?${queryParams}`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+    return this.handleResponse<{ success: boolean; athletes: any[]; total: number }>(response);
+  }
+
+  async getTalentHeatmap(params?: {
+    bounds?: string;
+    minTalentScore?: number;
+  }): Promise<{ success: boolean; heatmapData: any[]; total: number }> {
+    const queryParams = new URLSearchParams();
+    if (params?.bounds) queryParams.set('bounds', params.bounds);
+    if (params?.minTalentScore) queryParams.set('minTalentScore', params.minTalentScore.toString());
+
+    const response = await fetch(`${API_BASE_URL}/ai/talent-heatmap?${queryParams}`, {
+      method: 'GET',
+      headers: this.getAuthHeaders(),
+    });
+    return this.handleResponse<{ success: boolean; heatmapData: any[]; total: number }>(response);
+  }
+
+  async analyzeSentiment(text: string): Promise<{ success: boolean; sentiment: any }> {
+    const response = await fetch(`${API_BASE_URL}/ai/analyze-sentiment`, {
+      method: 'POST',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify({ text }),
+    });
+    return this.handleResponse<{ success: boolean; sentiment: any }>(response);
+  }
+
   // Generic HTTP methods for additional endpoints
   async get<T = any>(endpoint: string): Promise<T> {
     const response = await fetch(this.addCacheBuster(`${API_BASE_URL}${endpoint}`), {

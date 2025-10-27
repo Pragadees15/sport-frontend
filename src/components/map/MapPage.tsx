@@ -15,7 +15,6 @@ import {
   Search,
   TrendingUp,
   Map,
-  Settings,
   X,
   ChevronDown,
   ChevronUp,
@@ -81,13 +80,14 @@ export function MapPage() {
     };
   }, []);
   const [activeTab, setActiveTab] = useState<'map' | 'checkins' | 'safety'>('map');
-  const [mapType, setMapType] = useState<'standard' | 'heatmap' | 'safety'>('standard');
+  const [mapType, setMapType] = useState<'standard' | 'heatmap' | 'safety' | 'talent'>('standard');
   const [tileLayer, setTileLayer] = useState<'standard' | 'satellite' | 'terrain' | 'dark'>('standard');
   const [heatMapType] = useState<'activity' | 'women-safe' | 'disability-friendly'>('activity');
   const [locations, setLocations] = useState<MapLocation[]>([]);
   const [safeLocations, setSafeLocations] = useState<SafeLocation[]>([]);
   const [userCheckIns, setUserCheckIns] = useState<LocationCheckIn[]>([]);
   const [heatMapData, setHeatMapData] = useState<LocalHeatMapData[]>([]);
+  const [talentHeatmapData, setTalentHeatmapData] = useState<any[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<MapLocation | null>(null);
   const [showCheckInModal, setShowCheckInModal] = useState(false);
   const [showSafetyModal, setShowSafetyModal] = useState(false);
@@ -97,13 +97,12 @@ export function MapPage() {
   const [recentCheckedLocationIds, setRecentCheckedLocationIds] = useState<Set<string>>(new Set());
   const [selectedSafetyFeatures, setSelectedSafetyFeatures] = useState<string[]>([]);
   const [selectedSafeLocation, setSelectedSafeLocation] = useState<SafeLocation | null>(null);
+  const [isSubmittingLocation, setIsSubmittingLocation] = useState(false);
   
   // New UI state variables
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-  const [showMapControls, setShowMapControls] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [locationAccuracy, setLocationAccuracy] = useState<'high' | 'medium' | 'low' | 'unknown'>('unknown');
   
   const geolocationWatchIdRef = useRef<number | null>(null);
   const bestLocationRef = useRef<{ lat: number; lng: number; accuracy?: number; timestamp?: number; method?: 'gps' | 'network' | 'fallback' } | null>(null);
@@ -146,7 +145,7 @@ export function MapPage() {
     }
 
     // Strategy 1: Try high accuracy GPS first (single attempt with reasonable timeout)
-    const tryHighAccuracy = (): Promise<{ lat: number; lng: number; accuracy?: number; timestamp?: number; method?: 'gps' | 'network' | 'fallback' }> => {
+    const tryHighAccuracy = (): Promise<{ lat: number; lng: number; accuracy?: number; timestamp?: number; method?: 'gps' | 'network' | 'fallback' } | null> => {
       return new Promise((resolve) => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -161,7 +160,7 @@ export function MapPage() {
           },
           (error) => {
             console.warn('High accuracy location failed:', error);
-            resolve({ lat: 40.7128, lng: -74.0060, accuracy: 9999, method: 'fallback' });
+            resolve(null); // Return null instead of fallback to let network location try
           },
           { 
             enableHighAccuracy: true, 
@@ -202,21 +201,24 @@ export function MapPage() {
     // Try high accuracy first
     const highAccuracyResult = await tryHighAccuracy();
     
-    // If high accuracy worked and is reasonably accurate, use it
-    if (highAccuracyResult.accuracy && highAccuracyResult.accuracy <= 100) {
+    // If high accuracy worked, use it (even if not super accurate)
+    if (highAccuracyResult && highAccuracyResult.accuracy && highAccuracyResult.accuracy < 5000) {
       if (showLoading) {
-        toast.success('Accurate location found!', { id: 'location-loading' });
+        const message = highAccuracyResult.accuracy <= 100 
+          ? 'Accurate location found!' 
+          : `Approximate location found (±${Math.round(highAccuracyResult.accuracy)}m)`;
+        toast.success(message, { id: 'location-loading' });
       }
       return highAccuracyResult;
     }
 
-    // If high accuracy failed or is poor, try network location
+    // If high accuracy failed or is very poor, try network location
     const networkResult = await tryNetworkLocation();
     
-    // If network location worked, use it
-    if (networkResult.accuracy && networkResult.accuracy < 9999) {
+    // If network location worked, use it (be more lenient with accuracy)
+    if (networkResult.accuracy && networkResult.accuracy < 5000) {
       if (showLoading) {
-        toast.success('Approximate location found', { id: 'location-loading' });
+        toast.success(`Approximate location found (±${Math.round(networkResult.accuracy)}m)`, { id: 'location-loading' });
       }
       return networkResult;
     }
@@ -280,16 +282,7 @@ export function MapPage() {
           setUserLocation(candidate);
           improvementCount++;
           
-          // Update location accuracy state with more granular levels
-          if (candidate.accuracy && candidate.accuracy <= 5) {
-            setLocationAccuracy('high');
-          } else if (candidate.accuracy && candidate.accuracy <= 25) {
-            setLocationAccuracy('high');
-          } else if (candidate.accuracy && candidate.accuracy <= 50) {
-            setLocationAccuracy('medium');
-          } else {
-            setLocationAccuracy('low');
-          }
+          // Location accuracy no longer displayed to user
         }
 
         const elapsed = Date.now() - startedAt;
@@ -330,7 +323,17 @@ export function MapPage() {
         console.log('Safe locations loaded:', safeLocationsResponse.locations?.length || 0, 'locations');
         console.log('First safe location sample:', safeLocationsResponse.locations?.[0]);
         console.log('First safe location verifications_count:', safeLocationsResponse.locations?.[0]?.verifications_count);
-        setSafeLocations(safeLocationsResponse.locations || []);
+        
+        // Deduplicate safe locations by ID
+        const uniqueSafeLocations = safeLocationsResponse.locations?.reduce((acc, location) => {
+          if (!acc.find((l: any) => l.id === location.id)) {
+            acc.push(location);
+          }
+          return acc;
+        }, [] as any[]) || [];
+        
+        console.log('After deduplication:', uniqueSafeLocations.length, 'unique locations');
+        setSafeLocations(uniqueSafeLocations);
 
         // Note: Safe locations are now handled separately in the UI
         // We don't convert them to regular locations anymore
@@ -363,8 +366,27 @@ export function MapPage() {
             userCount: h.intensity || 1
           }));
           setHeatMapData(transformed);
+
+          // Load talent heatmap data for AI feature
+          try {
+            const bounds = {
+              north: userLocation.lat + delta,
+              south: userLocation.lat - delta,
+              east: userLocation.lng + delta,
+              west: userLocation.lng - delta
+            };
+            const talentResponse = await apiService.getTalentHeatmap({
+              bounds: JSON.stringify(bounds),
+              minTalentScore: 50
+            });
+            setTalentHeatmapData(talentResponse.heatmapData || []);
+          } catch (error) {
+            console.error('Failed to load talent heatmap:', error);
+            setTalentHeatmapData([]);
+          }
         } else {
           setHeatMapData([]);
+          setTalentHeatmapData([]);
         }
 
       } catch (error) {
@@ -643,7 +665,16 @@ export function MapPage() {
         page: 1,
         limit: 100
       });
-      setSafeLocations(safeLocationsResponse.locations || []);
+      
+      // Deduplicate safe locations by ID
+      const uniqueSafeLocations = safeLocationsResponse.locations?.reduce((acc, location) => {
+        if (!acc.find((l: any) => l.id === location.id)) {
+          acc.push(location);
+        }
+        return acc;
+      }, [] as any[]) || [];
+      
+      setSafeLocations(uniqueSafeLocations);
       
       // Award tokens for marking safety
       const earned = response.tokensEarned || 0;
@@ -722,6 +753,14 @@ export function MapPage() {
       return;
     }
 
+    // Prevent duplicate submissions
+    if (isSubmittingLocation) {
+      console.log('Already submitting, ignoring duplicate submission');
+      return;
+    }
+
+    setIsSubmittingLocation(true);
+
     try {
       const newLocationData = {
         name: locationData.name.trim(),
@@ -749,7 +788,16 @@ export function MapPage() {
         page: 1,
         limit: 100
       });
-      setSafeLocations(safeLocationsResponse.locations || []);
+      
+      // Deduplicate safe locations by ID
+      const uniqueSafeLocations = safeLocationsResponse.locations?.reduce((acc, location) => {
+        if (!acc.find((l: any) => l.id === location.id)) {
+          acc.push(location);
+        }
+        return acc;
+      }, [] as any[]) || [];
+      
+      setSafeLocations(uniqueSafeLocations);
       
       // Convert to map locations format and update
       const mapLocations: MapLocation[] = safeLocationsResponse.locations?.map((location: any) => ({
@@ -803,6 +851,8 @@ export function MapPage() {
       }
       
       toast.error(errorMessage);
+    } finally {
+      setIsSubmittingLocation(false);
     }
   };
 
@@ -879,53 +929,50 @@ export function MapPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       {/* Modern Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
-                  <Map className="w-5 h-5 text-white" />
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center space-x-2 sm:space-x-4 min-w-0">
+              <div className="flex items-center space-x-1.5 sm:space-x-2 min-w-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Map className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
-                <div>
-                  <h1 className="text-xl font-bold text-gray-900">Sports Map</h1>
-                  <p className="text-xs text-gray-500">Discover & Connect</p>
+                <div className="min-w-0">
+                  <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 truncate">Sports Map</h1>
+                  <p className="text-[10px] sm:text-xs text-gray-500 truncate hidden sm:block">Discover & Connect</p>
                 </div>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              {/* Location Status */}
-              <div className="flex items-center space-x-2 px-3 py-1.5 bg-gray-100 rounded-full">
+            <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0">
+              {/* Location Status - Simple indicator */}
+              <div className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-gray-100 rounded-full flex-shrink-0">
                 {userLocation ? (
                   <>
-                    <div className={`w-2 h-2 rounded-full ${
-                      locationAccuracy === 'high' ? 'bg-green-500' :
-                      locationAccuracy === 'medium' ? 'bg-yellow-500' :
-                      'bg-red-500'
-                    }`} />
-                    <span className="text-sm font-medium text-gray-700">
-                      {locationAccuracy === 'high' ? 'High Accuracy' :
-                       locationAccuracy === 'medium' ? 'Medium Accuracy' :
-                       'Low Accuracy'}
+                    <div className="w-2 h-2 rounded-full flex-shrink-0 bg-green-500" />
+                    <span className="text-xs sm:text-sm font-medium text-gray-700 whitespace-nowrap hidden sm:inline">
+                      Location Active
+                    </span>
+                    <span className="text-xs font-medium text-gray-700 sm:hidden">
+                      Active
                     </span>
                   </>
                 ) : (
                   <>
-                    <WifiOff className="w-4 h-4 text-gray-400" />
-                    <span className="text-sm text-gray-500">Location Off</span>
+                    <WifiOff className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" />
+                    <span className="text-xs sm:text-sm text-gray-500 hidden sm:inline">Location Off</span>
                   </>
                 )}
               </div>
               
               {/* Stats */}
-              <div className="hidden md:flex items-center space-x-4 text-sm">
+              <div className="hidden lg:flex items-center space-x-3 md:space-x-4 text-xs sm:text-sm">
                 <div className="flex items-center space-x-1">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  <span className="text-gray-600">{userCheckIns.length} check-ins</span>
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
+                  <span className="text-gray-600 whitespace-nowrap">{userCheckIns.length} check-ins</span>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <Shield className="w-4 h-4 text-blue-600" />
-                  <span className="text-gray-600">{safeLocations.length} safe spots</span>
+                  <Shield className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
+                  <span className="text-gray-600 whitespace-nowrap">{safeLocations.length} safe spots</span>
                 </div>
               </div>
             </div>
@@ -936,10 +983,10 @@ export function MapPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Modern Navigation */}
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
           {/* Sidebar Navigation */}
-          <div className="lg:w-80 space-y-4">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+          <div className="lg:w-80 space-y-3 sm:space-y-4">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 sm:p-4">
               <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
                 {[
                   { id: 'map', label: 'Map', icon: MapPin, color: 'blue' },
@@ -949,44 +996,44 @@ export function MapPage() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-md transition-all duration-200 ${
+                    className={`flex-1 flex items-center justify-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-2 rounded-md transition-all duration-200 min-h-[44px] ${
                       activeTab === tab.id
                         ? `bg-white text-${tab.color}-600 shadow-sm border border-${tab.color}-200`
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                     }`}
                   >
-                    <tab.icon className="h-4 w-4" />
-                    <span className="text-sm font-medium">{tab.label}</span>
+                    <tab.icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="text-xs sm:text-sm font-medium truncate">{tab.label}</span>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Search and Filters */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-              <div className="space-y-4">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 sm:p-4">
+              <div className="space-y-3 sm:space-y-4">
                 {/* Search Bar */}
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Search className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-3 h-3 sm:w-4 sm:h-4" />
                   <input
                     type="text"
                     placeholder="Search locations..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                   />
                 </div>
 
                 {/* Quick Filters */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Filters</span>
+                  <span className="text-xs sm:text-sm font-medium text-gray-700">Filters</span>
                   <button
                     onClick={() => setShowFilters(!showFilters)}
-                    className="flex items-center space-x-1 text-sm text-blue-600 hover:text-blue-700"
+                    className="flex items-center space-x-1 text-xs sm:text-sm text-blue-600 hover:text-blue-700 min-h-[44px] px-2"
                   >
-                    <Filter className="w-4 h-4" />
+                    <Filter className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span>{showFilters ? 'Hide' : 'Show'}</span>
-                    {showFilters ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    {showFilters ? <ChevronUp className="w-3 h-3 sm:w-4 sm:h-4" /> : <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />}
                   </button>
                 </div>
 
@@ -1023,7 +1070,8 @@ export function MapPage() {
                           {[
                             { id: 'standard', label: 'Standard', icon: Map },
                             { id: 'heatmap', label: 'Heat Map', icon: TrendingUp },
-                            { id: 'safety', label: 'Safety', icon: Shield }
+                            { id: 'safety', label: 'Safety', icon: Shield },
+                            { id: 'talent', label: 'AI Talent', icon: Zap }
                           ].map((type) => (
                             <button
                               key={type.id}
@@ -1080,11 +1128,12 @@ export function MapPage() {
               <div className="space-y-6">
                 {/* Map Container */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative">
-                  <div className="h-[600px] w-full">
+                  <div className="h-[400px] sm:h-[500px] md:h-[600px] w-full">
                     <MapComponent
                       locations={locations}
                       safeLocations={safeLocations}
                       heatMapData={heatMapData}
+                      talentHeatmapData={talentHeatmapData}
                       userLocation={userLocation}
                       mapType={mapType}
                       tileLayer={tileLayer}
@@ -1096,42 +1145,26 @@ export function MapPage() {
                   </div>
                   
                   {/* Floating Map Controls */}
-                  <div className="absolute top-4 right-4 z-10 flex flex-col space-y-2">
-                    {/* Location Status */}
-                    <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 p-3">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <div className={`w-2 h-2 rounded-full ${
-                          locationAccuracy === 'high' ? 'bg-green-500' :
-                          locationAccuracy === 'medium' ? 'bg-yellow-500' :
-                          locationAccuracy === 'low' ? 'bg-red-500' :
-                          'bg-gray-400'
-                        }`} />
-                        <span className="text-sm font-medium text-gray-700">
+                  <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-10 flex flex-col space-y-1.5 sm:space-y-2">
+                    {/* Location Status - Simple indicator */}
+                    <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 p-2 sm:p-3">
+                      <div className="flex items-center space-x-1 sm:space-x-2">
+                        <div className="w-2 h-2 rounded-full flex-shrink-0 bg-green-500" />
+                        <span className="text-xs sm:text-sm font-medium text-gray-700 truncate">
                           {userLocation ? 'Location Active' : 'Location Off'}
                         </span>
                       </div>
-                      
-                      {userLocation && userLocation.accuracy && (
-                        <div className="text-xs text-gray-600">
-                          <div>Accuracy: ±{Math.round(userLocation.accuracy)}m</div>
-                          <div className="flex items-center space-x-1 mt-1">
-                            {userLocation.method === 'gps' && <span>🛰️ GPS</span>}
-                            {userLocation.method === 'network' && <span>📶 Network</span>}
-                            <span className="capitalize">{locationAccuracy} accuracy</span>
-                          </div>
-                        </div>
-                      )}
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col space-y-2">
+                    <div className="flex flex-col space-y-1.5 sm:space-y-2">
                       <Button
                         onClick={refreshUserLocation}
                         size="sm"
-                        className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
+                        className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg text-xs sm:text-sm px-2 sm:px-3 py-2"
                       >
-                        <RotateCcw className="h-4 w-4 mr-2" />
-                        Refresh
+                        <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                        <span className="hidden sm:inline">Refresh</span>
                       </Button>
                       <Button
                         onClick={() => {
@@ -1143,22 +1176,12 @@ export function MapPage() {
                           }
                         }}
                         size="sm"
-                        className="bg-green-600 hover:bg-green-700 text-white shadow-lg"
+                        className="bg-green-600 hover:bg-green-700 text-white shadow-lg text-xs sm:text-sm px-2 sm:px-3 py-2"
                       >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add Location
+                        <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                        <span className="hidden sm:inline">Add Location</span>
                       </Button>
                     </div>
-
-                    {/* Map Controls Toggle */}
-                    <Button
-                      onClick={() => setShowMapControls(!showMapControls)}
-                      size="sm"
-                      variant="outline"
-                      className="bg-white/90 backdrop-blur-sm"
-                    >
-                      <Settings className="h-4 w-4" />
-                    </Button>
                   </div>
 
                   {/* Heatmap Legend */}
@@ -1186,10 +1209,38 @@ export function MapPage() {
                       </div>
                     </div>
                   )}
+
+                  {mapType === 'talent' && (
+                    <div className="absolute bottom-4 left-4 z-10">
+                      <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 p-3">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <Zap className="h-4 w-4 text-yellow-500" />
+                          <span className="text-sm font-medium text-gray-700">AI Talent Heatmap</span>
+                        </div>
+                        <div className="space-y-1 text-xs text-gray-600">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-3 h-3 bg-gradient-to-r from-yellow-400 to-orange-500 rounded"></div>
+                            <span>Elite Athletes (80+)</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-indigo-500 rounded"></div>
+                            <span>Advanced (70-79)</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-emerald-500 rounded"></div>
+                            <span>Intermediate (60-69)</span>
+                          </div>
+                          <div className="text-[10px] text-gray-500 mt-2">
+                            {talentHeatmapData.length} talent hotspots found
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Location Cards */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                   {/* Regular Locations */}
                   {locations.map((location) => (
                     <motion.div
@@ -1903,9 +1954,11 @@ export function MapPage() {
                     <Button
                       type="submit"
                       className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                      disabled={isSubmittingLocation}
+                      loading={isSubmittingLocation}
                     >
                       <Plus className="h-4 w-4 mr-2" />
-                      Add Location
+                      {isSubmittingLocation ? 'Adding...' : 'Add Location'}
                     </Button>
                   </div>
                 </form>

@@ -129,16 +129,16 @@ export function QuickActions() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6"
+      className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-6"
     >
-      <div className="flex items-center space-x-3 mb-6">
-        <div className="p-2 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg">
-          <Zap className="h-5 w-5 text-white" />
+      <div className="flex items-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
+        <div className="p-1.5 sm:p-2 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg">
+          <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
         </div>
-        <h3 className="text-xl font-bold text-gray-900">Quick Actions</h3>
+        <h3 className="text-lg sm:text-xl font-bold text-gray-900">Quick Actions</h3>
       </div>
       
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4">
         {availableActions.map((action, index) => {
           const IconComponent = action.icon;
           
@@ -149,20 +149,20 @@ export function QuickActions() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
               onClick={() => handleActionClick(action)}
-              className={`relative p-5 rounded-xl text-white text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${action.color} group`}
+              className={`relative p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl text-white text-left transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${action.color} group`}
             >
               {action.premium && (
-                <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                  <Trophy className="w-3 h-3 text-white" />
+                <div className="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                  <Trophy className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
                 </div>
               )}
               
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-semibold text-sm mb-2 group-hover:scale-105 transition-transform truncate">{action.title}</h4>
-                  <p className="text-xs opacity-90 leading-relaxed break-words">{action.description}</p>
+                  <h4 className="font-semibold text-xs sm:text-sm mb-1 sm:mb-2 group-hover:scale-105 transition-transform truncate">{action.title}</h4>
+                  <p className="text-xs opacity-90 leading-relaxed break-words line-clamp-2">{action.description}</p>
                 </div>
-                <IconComponent className="h-6 w-6 ml-3 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <IconComponent className="h-5 w-5 sm:h-6 sm:w-6 ml-2 sm:ml-3 flex-shrink-0 group-hover:scale-110 transition-transform" />
               </div>
             </motion.button>
           );
@@ -170,28 +170,28 @@ export function QuickActions() {
       </div>
       
       {/* Additional Quick Stats */}
-      <div className="mt-6 pt-6 border-t border-gray-200">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
-            <div className="text-xl font-bold text-blue-600 mb-1 truncate">{todayStats.posts_today}</div>
-            <div className="text-xs text-blue-700 font-medium break-words">Today's Posts</div>
+      <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4">
+          <div className="text-center p-2 sm:p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg sm:rounded-xl">
+            <div className="text-lg sm:text-xl font-bold text-blue-600 mb-0.5 sm:mb-1 truncate">{todayStats.posts_today}</div>
+            <div className="text-xs text-blue-700 font-medium break-words line-clamp-2">Today's Posts</div>
           </div>
-          <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
-            <div className="text-xl font-bold text-green-600 mb-1 truncate">{todayStats.active_chats}</div>
-            <div className="text-xs text-green-700 font-medium break-words">Active Chats</div>
+          <div className="text-center p-2 sm:p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-lg sm:rounded-xl">
+            <div className="text-lg sm:text-xl font-bold text-green-600 mb-0.5 sm:mb-1 truncate">{todayStats.active_chats}</div>
+            <div className="text-xs text-green-700 font-medium break-words line-clamp-2">Active Chats</div>
           </div>
-          <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl">
-            <div className="text-xl font-bold text-purple-600 mb-1 truncate">{todayStats.upcoming_events}</div>
-            <div className="text-xs text-purple-700 font-medium break-words">Upcoming Events</div>
+          <div className="text-center p-2 sm:p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg sm:rounded-xl">
+            <div className="text-lg sm:text-xl font-bold text-purple-600 mb-0.5 sm:mb-1 truncate">{todayStats.upcoming_events}</div>
+            <div className="text-xs text-purple-700 font-medium break-words line-clamp-2">Upcoming</div>
           </div>
         </div>
       </div>
       
       {/* Coach-specific actions */}
       {user?.role === 'coach' && (
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <h4 className="text-sm font-medium text-gray-900 mb-3">Coach Tools</h4>
-          <div className="space-y-2">
+        <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-100">
+          <h4 className="text-xs sm:text-sm font-medium text-gray-900 mb-2 sm:mb-3">Coach Tools</h4>
+          <div className="space-y-1.5 sm:space-y-2">
             <button 
               onClick={() => setCurrentView('expert')}
               className="w-full flex items-center space-x-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 rounded-lg transition-colors"

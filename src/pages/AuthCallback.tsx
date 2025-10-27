@@ -210,15 +210,15 @@ export function AuthCallback() {
   const IconComponent = stepContent.icon;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center p-4">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center max-w-md mx-auto p-8 bg-white rounded-3xl shadow-2xl border border-gray-200"
+        className="text-center max-w-md mx-auto p-6 sm:p-8 bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-200"
       >
-        <div className="relative mb-8">
+        <div className="relative mb-6 sm:mb-8">
           <motion.div 
-            className={`w-20 h-20 bg-gradient-to-r ${stepContent.bgColor} rounded-full flex items-center justify-center mx-auto shadow-lg`}
+            className={`w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r ${stepContent.bgColor} rounded-full flex items-center justify-center mx-auto shadow-lg`}
             animate={{ 
               scale: authStep === 'success' ? [1, 1.1, 1] : 1,
               rotate: authStep === 'validating' || authStep === 'creating' || authStep === 'updating' ? 360 : 0
@@ -228,7 +228,7 @@ export function AuthCallback() {
               rotate: { duration: 2, repeat: authStep === 'validating' || authStep === 'creating' || authStep === 'updating' ? Infinity : 0, ease: "linear" }
             }}
           >
-            <IconComponent className="h-8 w-8 text-white" />
+            <IconComponent className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
           </motion.div>
           
           {authStep === 'success' && (
@@ -236,15 +236,15 @@ export function AuthCallback() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.5 }}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center"
+              className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded-full flex items-center justify-center"
             >
-              <CheckCircle className="h-3 w-3 text-white" />
+              <CheckCircle className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white" />
             </motion.div>
           )}
         </div>
         
         <motion.h2 
-          className="text-3xl font-bold text-gray-900 mb-4"
+          className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -253,7 +253,7 @@ export function AuthCallback() {
         </motion.h2>
         
         <motion.p 
-          className="text-gray-600 mb-8"
+          className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -262,32 +262,32 @@ export function AuthCallback() {
         </motion.p>
         
         {authStep !== 'error' && authStep !== 'success' && (
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             <motion.div 
-              className="flex items-center justify-center space-x-2 text-sm text-gray-500"
+              className="flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-500"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <div className={`w-2 h-2 bg-${stepContent.color}-500 rounded-full animate-pulse`}></div>
+              <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 bg-${stepContent.color}-500 rounded-full animate-pulse`}></div>
               <span>Processing authentication</span>
             </motion.div>
             <motion.div 
-              className="flex items-center justify-center space-x-2 text-sm text-gray-500"
+              className="flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-500"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <div className={`w-2 h-2 bg-${stepContent.color}-500 rounded-full animate-pulse`} style={{ animationDelay: '0.5s' }}></div>
+              <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 bg-${stepContent.color}-500 rounded-full animate-pulse`} style={{ animationDelay: '0.5s' }}></div>
               <span>Setting up your account</span>
             </motion.div>
             <motion.div 
-              className="flex items-center justify-center space-x-2 text-sm text-gray-500"
+              className="flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-500"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 }}
             >
-              <div className={`w-2 h-2 bg-${stepContent.color}-500 rounded-full animate-pulse`} style={{ animationDelay: '1s' }}></div>
+              <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 bg-${stepContent.color}-500 rounded-full animate-pulse`} style={{ animationDelay: '1s' }}></div>
               <span>Preparing your dashboard</span>
             </motion.div>
           </div>
@@ -299,7 +299,7 @@ export function AuthCallback() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
             onClick={() => navigate('/auth')}
-            className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm sm:text-base rounded-lg sm:rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             Return to Sign In
           </motion.button>

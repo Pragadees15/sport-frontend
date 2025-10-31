@@ -81,21 +81,21 @@ export function Header() {
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
         <div className="flex justify-between items-center h-14 sm:h-16">
             {/* Logo and Brand */}
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <Link to="/dashboard/home" className="flex items-center space-x-2 group min-w-0">
+            <div className="flex items-center space-x-1.5 xs:space-x-2 sm:space-x-4 min-w-0 flex-shrink">
+              <Link to="/dashboard/home" className="flex items-center space-x-1.5 xs:space-x-2 group min-w-0 flex-shrink">
                 <div className="relative flex-shrink-0">
-                  <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                    <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                  <div className="w-7 h-7 xs:w-8 xs:h-8 sm:w-9 sm:h-9 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                    <Zap className="h-3.5 w-3.5 xs:h-4 xs:w-4 sm:h-5 sm:w-5 text-white" />
                   </div>
             {isConnected && (
-                    <div className="absolute -top-1 -right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
+                    <div className="absolute -top-0.5 -right-0.5 xs:-top-1 xs:-right-1 w-2 h-2 xs:w-2.5 xs:h-2.5 sm:w-3 sm:h-3 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
                   )}
                 </div>
-                <div className="hidden sm:block min-w-0">
-                  <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent truncate">
+                <div className="hidden xs:block min-w-0 max-w-[120px] xs:max-w-[140px] sm:max-w-none">
+                  <h1 className="text-base xs:text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent truncate">
                     SportsFeed
                   </h1>
-                  <p className="text-[10px] sm:text-xs text-gray-500 -mt-0.5 sm:-mt-1 truncate">Connect. Compete. Excel.</p>
+                  <p className="text-[9px] xs:text-[10px] sm:text-xs text-gray-500 -mt-0.5 sm:-mt-1 truncate hide-xs">Connect. Compete. Excel.</p>
                 </div>
               </Link>
           </div>
@@ -165,7 +165,7 @@ export function Header() {
           </nav>
 
             {/* Right Side Actions */}
-            <div className="flex items-center space-x-1 sm:space-x-2">
+            <div className="flex items-center space-x-0.5 xs:space-x-1 sm:space-x-2 flex-shrink-0">
 
               {/* Notifications */}
               <NotificationBell />
@@ -175,7 +175,7 @@ export function Header() {
               <div className="relative" ref={userDropdownRef}>
                 <button
                   onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                  className="flex items-center space-x-1 sm:space-x-2 p-1.5 sm:p-2 rounded-lg hover:bg-gray-50 transition-colors min-h-[44px]"
+                  className="flex items-center space-x-1 sm:space-x-2 p-1 xs:p-1.5 sm:p-2 rounded-lg hover:bg-gray-50 transition-colors min-h-[44px] min-w-[44px]"
             >
               <Avatar
                 src={user?.avatar_url}
@@ -184,14 +184,15 @@ export function Header() {
                 name={user?.name || user?.fullName}
                 userId={user?.id}
                 size="sm"
+                className="flex-shrink-0"
               />
-                  <div className="hidden md:block text-left min-w-0 max-w-[120px]">
-                  <p className="text-sm font-medium text-gray-900 truncate">
+                  <div className="hidden md:block text-left min-w-0 max-w-[100px] lg:max-w-[120px]">
+                  <p className="text-sm font-medium text-gray-900 truncate-with-tooltip">
                       {user?.name || user?.fullName}
                     </p>
-                    <p className="text-xs text-gray-500 capitalize truncate">{user?.role}</p>
+                    <p className="text-xs text-gray-500 capitalize truncate-with-tooltip">{user?.role}</p>
                   </div>
-                  <ChevronDown className="h-4 w-4 text-gray-400 hidden sm:block" />
+                  <ChevronDown className="h-4 w-4 text-gray-400 hidden sm:block flex-shrink-0" />
                 </button>
 
                 {/* User Dropdown Menu */}

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { X, Gift, Copy, Share, Users, TrendingUp } from 'lucide-react';
-import { useAppStore } from '../../store/appStore';
 import { apiService } from '../../services/api';
 import { Button } from '../ui/Button';
 import toast from 'react-hot-toast';
@@ -12,7 +11,6 @@ interface ReferralModalProps {
 }
 
 export function ReferralModal({ onClose, userId }: ReferralModalProps) {
-  const { addTokens } = useAppStore();
   const [referralCode, setReferralCode] = useState('');
   const [referralLink, setReferralLink] = useState('');
   const [referralStats, setReferralStats] = useState({ totalReferrals: 0, totalEarned: 0 });
@@ -28,12 +26,13 @@ export function ReferralModal({ onClose, userId }: ReferralModalProps) {
         
         setReferralCode(codeData.referralCode);
         setReferralLink(codeData.referralLink);
-        setReferralStats(statsData.stats);
+        setReferralStats({
+          totalReferrals: statsData.stats.totalReferrals,
+          totalEarned: statsData.stats.totalEarned
+        });
       } catch (error) {
         console.error('Failed to fetch referral data:', error);
-        // Fallback to generated code
-        setReferralCode(`SPORT${userId.slice(-4).toUpperCase()}`);
-        setReferralLink(`${window.location.origin}/signup?ref=${referralCode}`);
+        toast.error('Failed to load referral data');
       } finally {
         setLoading(false);
       }
@@ -63,16 +62,17 @@ export function ReferralModal({ onClose, userId }: ReferralModalProps) {
     }
   };
 
-  const simulateReferral = () => {
-    // Simulate a successful referral
-    addTokens(userId, 50, 'earned', 'Friend joined using your referral code');
-    toast.success('Congratulations! You earned 50 tokens from a referral!');
-    
-    // Update stats
-    setReferralStats(prev => ({
-      totalReferrals: prev.totalReferrals + 1,
-      totalEarned: prev.totalEarned + 50
-    }));
+  const refreshStats = async () => {
+    try {
+      const statsData = await apiService.getReferralStats();
+      setReferralStats({
+        totalReferrals: statsData.stats.totalReferrals,
+        totalEarned: statsData.stats.totalEarned
+      });
+      toast.success('Stats refreshed!');
+    } catch (error) {
+      console.error('Failed to refresh stats:', error);
+    }
   };
 
   return (
@@ -198,26 +198,27 @@ export function ReferralModal({ onClose, userId }: ReferralModalProps) {
               Share Referral Link
             </Button>
 
-            {/* Demo Button */}
+            {/* Refresh Stats Button */}
             <Button
-              onClick={simulateReferral}
+              onClick={refreshStats}
               variant="outline"
               className="w-full border-gray-300 hover:bg-gray-50"
               size="sm"
               disabled={loading}
             >
               <Users className="h-4 w-4 mr-2" />
-              Simulate Referral (Demo)
+              Refresh Statistics
             </Button>
           </div>
 
           <div className="mt-6 p-4 bg-blue-50 rounded-lg">
             <h4 className="font-semibold text-blue-900 mb-2">How it works:</h4>
             <ul className="text-sm text-blue-800 space-y-1">
-              <li>1. Share your referral code or link</li>
-              <li>2. Friend signs up using your code</li>
-              <li>3. Both of you get 50 tokens instantly!</li>
-              <li>4. No limit on referrals</li>
+              <li>✓ Share your referral code or link with friends</li>
+              <li>✓ They sign up using your code during registration</li>
+              <li>✓ Both of you receive 50 tokens instantly!</li>
+              <li>✓ Unlimited referrals - earn more by sharing more</li>
+              <li>✓ Track your earnings in real-time</li>
             </ul>
           </div>
         </div>

@@ -150,14 +150,14 @@ export function EditProfileModal({ user, onClose }: EditProfileModalProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-0 md:p-4"
         onClick={onClose}
       >
         <motion.div
           initial={{ scale: 0.9, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
-          className="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-gray-100"
+          className="mobile-modal bg-white rounded-none md:rounded-xl lg:rounded-2xl shadow-2xl max-w-2xl w-full max-h-screen md:max-h-[90vh] overflow-y-auto border-0 md:border border-gray-100"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Enhanced Header */}

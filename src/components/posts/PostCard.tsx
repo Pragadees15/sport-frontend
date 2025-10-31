@@ -376,7 +376,7 @@ export function PostCard({ post, onDelete }: PostCardProps) {
     >
       {/* Header */}
       <div className="flex items-center justify-between p-3 sm:p-4 lg:p-6">
-        <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+        <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1 overflow-hidden">
           <div className="relative flex-shrink-0">
             <Avatar
               src={postAuthor.avatar_url}
@@ -387,18 +387,18 @@ export function PostCard({ post, onDelete }: PostCardProps) {
               className="ring-2 ring-white shadow-sm"
             />
           </div>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center space-x-1.5 sm:space-x-2">
-              <h3 className="font-semibold text-gray-900 truncate text-sm sm:text-base">{postAuthor.username || postAuthor.name || postAuthor.fullName}</h3>
+          <div className="min-w-0 flex-1 overflow-hidden">
+            <div className="flex items-center space-x-1 sm:space-x-1.5 overflow-hidden">
+              <h3 className="font-semibold text-gray-900 truncate-with-tooltip text-sm sm:text-base max-w-[120px] xs:max-w-[150px] sm:max-w-[200px]">{postAuthor.username || postAuthor.name || postAuthor.fullName}</h3>
               {getVerificationBadge()}
             </div>
-            <div className="flex items-center space-x-1.5 sm:space-x-2 mt-0.5 sm:mt-1">
+            <div className="flex items-center space-x-1 sm:space-x-1.5 mt-0.5 sm:mt-1 overflow-hidden">
               {post.sports_category && (
-                <span className="text-[11px] sm:text-sm text-gray-500 capitalize bg-gray-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full truncate max-w-[100px] sm:max-w-none">
+                <span className="text-[11px] sm:text-sm text-gray-500 capitalize bg-gray-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full truncate-with-tooltip max-w-[80px] xs:max-w-[100px] sm:max-w-none flex-shrink-0">
                   {post.sports_category.replace('-', ' ')}
                 </span>
               )}
-              <span className="text-[10px] sm:text-xs text-gray-400 truncate">
+              <span className="text-[10px] sm:text-xs text-gray-400 truncate-with-tooltip flex-shrink">
                 {new Date(post.createdAt || post.created_at).toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
@@ -459,7 +459,7 @@ export function PostCard({ post, onDelete }: PostCardProps) {
       {/* Content */}
       {post.content && (
         <div className="px-3 sm:px-4 lg:px-6 pb-3 sm:pb-4">
-          <p className="text-gray-900 whitespace-pre-wrap text-sm sm:text-base leading-relaxed break-words">{post.content}</p>
+          <p className="text-gray-900 whitespace-pre-wrap text-sm sm:text-base leading-relaxed overflow-safe">{post.content}</p>
         </div>
       )}
 
@@ -531,12 +531,13 @@ export function PostCard({ post, onDelete }: PostCardProps) {
             } else {
               // Default to image if media type is not detected
               return (
-                <div className="relative group overflow-hidden">
+                <div className="relative group overflow-hidden responsive-img-wrapper">
                   <img
                     src={mediaUrl}
                     alt="Post content"
                     className="w-full h-56 sm:h-72 md:h-80 lg:h-96 object-cover transition-transform duration-300 group-hover:scale-105"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
                 </div>

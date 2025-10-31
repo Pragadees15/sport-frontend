@@ -43,12 +43,14 @@ export function UserProfile() {
   const [sharedPosts, setSharedPosts] = useState<Post[]>([]);
   const [followers, setFollowers] = useState<User[]>([]);
   const [following, setFollowing] = useState<User[]>([]);
+  const [verificationStatus, setVerificationStatus] = useState<'pending' | 'approved' | 'rejected' | null>(null);
 
   // Enhanced loading states
   const [isLoadingPosts, setIsLoadingPosts] = useState(true);
   const [isLoadingSharedPosts, setIsLoadingSharedPosts] = useState(true);
   const [isLoadingFollowers, setIsLoadingFollowers] = useState(true);
   const [isLoadingFollowing, setIsLoadingFollowing] = useState(true);
+  const [isLoadingVerification, setIsLoadingVerification] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -84,12 +86,14 @@ export function UserProfile() {
         postsData,
         sharedPostsData,
         followersData,
-        followingData
+        followingData,
+        verificationData
       ] = await Promise.allSettled([
         apiService.getUserPosts(user.id, { limit: 20 }),
         apiService.getUserSharedPosts(user.id, { limit: 20 }),
         apiService.getUserFollowers(user.id, { limit: 50 }),
-        apiService.getUserFollowing(user.id, { limit: 50 })
+        apiService.getUserFollowing(user.id, { limit: 50 }),
+        apiService.getMyVerificationRequests()
         ]);
 
       // Handle posts data
@@ -130,6 +134,19 @@ export function UserProfile() {
         setIsLoadingFollowing(false);
       }
 
+      // Handle verification data
+      if (verificationData.status === 'fulfilled') {
+        const requests = verificationData.value.requests || [];
+        // Get the most recent verification request
+        if (requests.length > 0) {
+          const latestRequest = requests[0]; // Already ordered by created_at DESC
+          setVerificationStatus(latestRequest.status);
+        }
+        setIsLoadingVerification(false);
+      } else {
+        console.error('Error fetching verification status:', verificationData.reason);
+        setIsLoadingVerification(false);
+      }
 
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -428,21 +445,33 @@ export function UserProfile() {
           >
                 <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                {user?.verificationStatus === 'approved' && <CheckCircle className="h-6 w-6 text-green-500" />}
-                {user?.verificationStatus === 'rejected' && <XCircle className="h-6 w-6 text-red-500" />}
-                {user?.verificationStatus === 'pending' && <Clock className="h-6 w-6 text-yellow-500" />}
+                {isLoadingVerification ? (
+                  <Loader2 className="h-6 w-6 text-gray-400 animate-spin" />
+                ) : (
+                  <>
+                    {verificationStatus === 'approved' && <CheckCircle className="h-6 w-6 text-green-500" />}
+                    {verificationStatus === 'rejected' && <XCircle className="h-6 w-6 text-red-500" />}
+                    {verificationStatus === 'pending' && <Clock className="h-6 w-6 text-yellow-500" />}
+                    {!verificationStatus && <AlertCircle className="h-6 w-6 text-gray-400" />}
+                  </>
+                )}
                 <div>
                   <h3 className="font-semibold text-gray-900">Verification Status</h3>
-                  <p className={`text-sm font-medium ${
-                        user?.verificationStatus === 'approved' ? 'text-green-600' :
-                        user?.verificationStatus === 'rejected' ? 'text-red-600' :
-                        'text-yellow-600'
-                      }`}>
-                    {user?.verificationStatus ? user.verificationStatus.charAt(0).toUpperCase() + user.verificationStatus.slice(1) : 'Unknown'}
-                  </p>
+                  {isLoadingVerification ? (
+                    <p className="text-sm text-gray-500">Loading...</p>
+                  ) : (
+                    <p className={`text-sm font-medium ${
+                          verificationStatus === 'approved' ? 'text-green-600' :
+                          verificationStatus === 'rejected' ? 'text-red-600' :
+                          verificationStatus === 'pending' ? 'text-yellow-600' :
+                          'text-gray-600'
+                        }`}>
+                      {verificationStatus ? verificationStatus.charAt(0).toUpperCase() + verificationStatus.slice(1) : 'Not Requested'}
+                    </p>
+                  )}
                 </div>
                   </div>
-                  {user?.verificationStatus === 'pending' && (
+                  {verificationStatus === 'pending' && !isLoadingVerification && (
                     <Button
                       onClick={() => setShowEvidenceUpload(true)}
                       size="sm"
@@ -451,6 +480,17 @@ export function UserProfile() {
                     >
                       <Upload className="h-4 w-4 mr-2" />
                       Upload Evidence
+                    </Button>
+                  )}
+                  {!verificationStatus && !isLoadingVerification && (
+                    <Button
+                      onClick={() => setShowEvidenceUpload(true)}
+                      size="sm"
+                  variant="outline"
+                  className="border-blue-500 text-blue-600 hover:bg-blue-50"
+                    >
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Request Verification
                     </Button>
                   )}
                 </div>

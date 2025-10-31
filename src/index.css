@@ -65,6 +65,38 @@
       -webkit-overflow-scrolling: touch;
     }
   }
+
+  /* Very small screens (< 360px) */
+  @media (max-width: 359px) {
+    /* Reduce padding on very small screens */
+    .container, [class*="container"] {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+    
+    /* Reduce font sizes slightly */
+    h1 { font-size: 1.5rem !important; }
+    h2 { font-size: 1.25rem !important; }
+    h3 { font-size: 1.125rem !important; }
+    
+    /* Hide less critical elements */
+    .hide-xs {
+      display: none !important;
+    }
+  }
+
+  /* Tablet landscape optimization */
+  @media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+    /* Optimize for tablet landscape */
+    .tablet-landscape-optimize {
+      max-width: 100%;
+    }
+    
+    /* Better two-column layouts */
+    .tablet-landscape-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
 }
 
 /* Safe area insets for modern devices */
@@ -106,6 +138,7 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .truncate-3-lines {
@@ -113,6 +146,21 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .truncate-4-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .truncate-with-tooltip {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   
   /* Smooth scrolling */
@@ -128,5 +176,39 @@
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Mobile-optimized modal */
+  .mobile-modal {
+    @media (max-width: 768px) {
+      position: fixed;
+      inset: 0;
+      margin: 0;
+      max-height: 100vh;
+      max-width: 100vw;
+      border-radius: 0;
+      overflow-y: auto;
+    }
+  }
+
+  /* Responsive image wrapper */
+  .responsive-img-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .responsive-img-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Better overflow handling */
+  .overflow-safe {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
   }
 }

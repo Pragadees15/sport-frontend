@@ -92,10 +92,16 @@ export function AuthCallback() {
           const updateData: any = { last_login: new Date().toISOString() };
           
           const googleAvatarUrl = getValidAvatarUrl(user.user_metadata?.avatar_url);
+          const currentAvatar = userProfile?.avatar_url;
           
-          // Update avatar URL if user has a valid Google avatar and it's different from stored one
-          if (googleAvatarUrl && 
-              (!userProfile?.avatar_url || userProfile.avatar_url !== googleAvatarUrl)) {
+          // ONLY update avatar URL if user has no avatar or still has a Google avatar (hasn't customized it)
+          const shouldUpdateAvatar = googleAvatarUrl && 
+            (
+              !currentAvatar || 
+              (currentAvatar.includes('googleusercontent.com') && currentAvatar !== googleAvatarUrl)
+            );
+          
+          if (shouldUpdateAvatar) {
             updateData.avatar_url = googleAvatarUrl;
             console.log('Updating user avatar URL:', googleAvatarUrl);
           }
@@ -115,8 +121,8 @@ export function AuthCallback() {
             
           const finalUser = currentUserProfile ? {
             ...currentUserProfile,
-            // Always use the latest valid Google avatar URL if available
-            avatar_url: googleAvatarUrl || currentUserProfile.avatar_url
+            // Use Google avatar only if user hasn't customized their avatar (still using Google or has none)
+            avatar_url: shouldUpdateAvatar ? (googleAvatarUrl || currentUserProfile.avatar_url) : currentUserProfile.avatar_url
           } : {
             id: user.id,
             email: user.email!,

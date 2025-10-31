@@ -3,11 +3,12 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Shield, Trophy, Heart, ArrowRight, ArrowLeft, CheckCircle, Star } from 'lucide-react';
+import { User, Shield, Trophy, Heart, ArrowRight, ArrowLeft, CheckCircle, Star, Gift } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { GoogleAuthButton } from './GoogleAuthButton';
 import { sportRoles } from '../../data/sportRoles';
 import toast from 'react-hot-toast';
+import { useSearchParams } from 'react-router-dom';
 
 const schema = yup.object({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -39,6 +40,7 @@ interface SignupFormProps {
 type SignupStep = 'role' | 'details' | 'preferences' | 'emergency' | 'account';
 
 export function SignupForm({ onSignupSuccess }: SignupFormProps) {
+  const [searchParams] = useSearchParams();
   const [currentStep, setCurrentStep] = useState<SignupStep>('role');
   const [selectedRole, setSelectedRole] = useState<'user' | 'coach' | 'fan' | 'aspirant' | 'administrator'>('user');
   const [selectedGender, setSelectedGender] = useState<'male' | 'female' | 'other' | 'prefer-not-to-say'>('prefer-not-to-say');
@@ -47,12 +49,22 @@ export function SignupForm({ onSignupSuccess }: SignupFormProps) {
   const [selectedSportRole, setSelectedSportRole] = useState<string>('');
   const [sportInterests, setSportInterests] = useState<string[]>([]);
   const [selectedSportsCategory, setSelectedSportsCategory] = useState<string>('');
+  const [referralCode, setReferralCode] = useState<string>('');
   const [emergencyContact, setEmergencyContact] = useState({
     name: '',
     phone: '',
     relationship: ''
   });
   const { register: registerUser, isLoading } = useAuthStore();
+  
+  // Get referral code from URL
+  useEffect(() => {
+    const refCode = searchParams.get('ref');
+    if (refCode) {
+      setReferralCode(refCode);
+      toast.success('Referral code applied! You\'ll get bonus tokens on signup.');
+    }
+  }, [searchParams]);
   
   const {
     register,
@@ -89,11 +101,14 @@ export function SignupForm({ onSignupSuccess }: SignupFormProps) {
         sportInterests,
         isProfessional: selectedRoleData?.isProfessional || false,
         verificationStatus: selectedRoleData?.requiresEvidence ? 'pending' : 'approved',
+        referralCode: referralCode || undefined, // Include referral code if provided
       };
       
       await registerUser(registrationData);
       
-      if (selectedRoleData?.requiresEvidence) {
+      if (referralCode) {
+        toast.success('🎉 Registration successful! You\'ve earned bonus tokens from the referral!');
+      } else if (selectedRoleData?.requiresEvidence) {
         toast.success('Registration successful! Please upload your evidence documents for verification.');
       } else {
         toast.success('Registration successful! Your account is ready to use.');
@@ -616,6 +631,46 @@ export function SignupForm({ onSignupSuccess }: SignupFormProps) {
 
           {currentStep === 'account' && (
             <div className="space-y-6">
+              {/* Referral Code Display */}
+              {referralCode && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200 rounded-xl p-4"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-gradient-to-r from-green-500 to-blue-500 p-2 rounded-lg">
+                      <Gift className="h-5 w-5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-green-900">Referral Code Applied</p>
+                      <p className="text-xs text-green-700">Code: <span className="font-mono font-bold">{referralCode}</span></p>
+                      <p className="text-xs text-green-600 mt-1">You'll receive 50 bonus tokens on signup! 🎉</p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Referral Code Input (if not from URL) */}
+              {!referralCode && (
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Referral Code (Optional)
+                  </label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="text"
+                      value={referralCode}
+                      onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+                      placeholder="Enter referral code"
+                      className="flex-1 px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 font-mono"
+                    />
+                    <Gift className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <p className="text-xs text-gray-500">Have a referral code? Enter it to get 50 bonus tokens!</p>
+                </div>
+              )}
+
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">Password</label>
                 <input

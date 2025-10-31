@@ -117,6 +117,7 @@ class ApiService {
       relationship: string;
     };
     sportRoles?: string[];
+    referralCode?: string;
   }): Promise<{ user: User; session: any }> {
     const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: 'POST',

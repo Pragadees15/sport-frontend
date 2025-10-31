@@ -22,6 +22,7 @@ interface RegisterData {
     relationship: string;
   };
   sportRoles?: string[];
+  referralCode?: string;
 }
 
 interface AuthState {
@@ -90,6 +91,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         accessibilityNeeds: data.accessibilityNeeds,
         emergencyContact: data.emergencyContact,
         sportRoles: data.sportRoles,
+        referralCode: data.referralCode,
       });
 
       // After successful registration, sign in to get the session
@@ -154,11 +156,20 @@ export const useAuthStore = create<AuthState>((set) => ({
         }
 
         // Check if we need to update the avatar URL from Google metadata
+        // ONLY update if user has no avatar or still has a Google avatar (hasn't customized it)
         const googleAvatarUrl = session.user.user_metadata?.avatar_url;
-        if (googleAvatarUrl && 
-            googleAvatarUrl !== userProfile.avatar_url &&
-            googleAvatarUrl.includes('googleusercontent.com')) {
-          
+        const currentAvatar = userProfile.avatar_url;
+        
+        const shouldUpdateAvatar = googleAvatarUrl && 
+          googleAvatarUrl.includes('googleusercontent.com') &&
+          (
+            // User has no avatar yet
+            !currentAvatar || 
+            // Current avatar is still a Google avatar (hasn't been customized)
+            (currentAvatar.includes('googleusercontent.com') && currentAvatar !== googleAvatarUrl)
+          );
+        
+        if (shouldUpdateAvatar) {
           // Update the avatar URL in the database
           const { error: updateError } = await supabase
             .from('users')
@@ -172,6 +183,12 @@ export const useAuthStore = create<AuthState>((set) => ({
             userProfile.avatar_url = googleAvatarUrl;
             console.log('Updated avatar URL from Google metadata:', googleAvatarUrl);
           }
+        } else {
+          // Just update last login without touching the avatar
+          await supabase
+            .from('users')
+            .update({ last_login: new Date().toISOString() })
+            .eq('id', session.user.id);
         }
 
         set({ user: userProfile, isAuthenticated: true });

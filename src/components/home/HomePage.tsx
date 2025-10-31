@@ -143,18 +143,18 @@ export function HomePage() {
               Ready to connect with your {user.sports_categories?.[0] ? user.sports_categories[0].replace('-', ' ') : 'sports'} community and achieve your goals?
             </p>
             
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 px-4">
-              <div className="flex items-center space-x-1.5 sm:space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg">
-                <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-green-500 flex-shrink-0" />
-                <span className="text-xs sm:text-sm font-medium text-gray-700">Track Progress</span>
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 px-2 xs:px-4">
+              <div className="flex items-center space-x-1 xs:space-x-1.5 sm:space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-2 xs:px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg">
+                <Target className="h-3 w-3 xs:h-3.5 xs:w-3.5 sm:h-4 sm:w-4 text-green-500 flex-shrink-0" />
+                <span className="text-[10px] xs:text-xs sm:text-sm font-medium text-gray-700 whitespace-nowrap">Track Progress</span>
               </div>
-              <div className="flex items-center space-x-1.5 sm:space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg">
-                <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-500 flex-shrink-0" />
-                <span className="text-xs sm:text-sm font-medium text-gray-700 truncate">Connect with Athletes</span>
+              <div className="flex items-center space-x-1 xs:space-x-1.5 sm:space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-2 xs:px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg">
+                <Users className="h-3 w-3 xs:h-3.5 xs:w-3.5 sm:h-4 sm:w-4 text-blue-500 flex-shrink-0" />
+                <span className="text-[10px] xs:text-xs sm:text-sm font-medium text-gray-700 truncate max-w-[80px] xs:max-w-none">Connect</span>
               </div>
-              <div className="flex items-center space-x-1.5 sm:space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg">
-                <Trophy className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-yellow-500 flex-shrink-0" />
-                <span className="text-xs sm:text-sm font-medium text-gray-700">Achieve Goals</span>
+              <div className="flex items-center space-x-1 xs:space-x-1.5 sm:space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-2 xs:px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg">
+                <Trophy className="h-3 w-3 xs:h-3.5 xs:w-3.5 sm:h-4 sm:w-4 text-yellow-500 flex-shrink-0" />
+                <span className="text-[10px] xs:text-xs sm:text-sm font-medium text-gray-700 whitespace-nowrap">Achieve Goals</span>
               </div>
             </div>
           </motion.div>
@@ -184,20 +184,20 @@ export function HomePage() {
               transition={{ delay: 0.2 }}
               className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-6"
             >
-              <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
-                <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
-                  <div className="p-1.5 sm:p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex-shrink-0">
-                    <Rss className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+              <div className="flex items-center justify-between mb-4 sm:mb-6 gap-1 xs:gap-2">
+                <div className="flex items-center space-x-1.5 xs:space-x-2 sm:space-x-3 min-w-0 overflow-hidden">
+                  <div className="p-1 xs:p-1.5 sm:p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex-shrink-0">
+                    <Rss className="h-3.5 w-3.5 xs:h-4 xs:w-4 sm:h-5 sm:w-5 text-white" />
                   </div>
-                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 truncate">Your Feed</h2>
+                  <h2 className="text-base xs:text-lg sm:text-xl font-bold text-gray-900 truncate">Your Feed</h2>
                 </div>
                 <button
                   onClick={handleRefresh}
                   disabled={refreshing}
-                  className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium text-gray-700 transition-colors disabled:opacity-50 min-h-[44px] flex-shrink-0"
+                  className="flex items-center space-x-1 sm:space-x-2 px-2 xs:px-3 sm:px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs xs:text-sm font-medium text-gray-700 transition-colors disabled:opacity-50 min-h-[44px] min-w-[44px] flex-shrink-0"
                 >
-                  <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-                  <span className="hidden sm:inline">Refresh</span>
+                  <RefreshCw className={`h-3.5 w-3.5 xs:h-4 xs:w-4 ${refreshing ? 'animate-spin' : ''}`} />
+                  <span className="hidden xs:inline">Refresh</span>
                 </button>
               </div>
               

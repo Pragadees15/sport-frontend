@@ -210,121 +210,133 @@ export function SuggestedUsers() {
       animate={{ opacity: 1, y: 0 }}
       className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-6"
     >
-      <div className="flex items-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
-        <div className="p-1.5 sm:p-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg">
-          <Users className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+      <div className="flex items-center gap-2 sm:gap-2.5 mb-4 sm:mb-5">
+        <div className="p-1.5 sm:p-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg shadow-sm flex-shrink-0">
+          <Users className="h-4 w-4 text-white" />
         </div>
-        <h3 className="text-lg sm:text-xl font-bold text-gray-900">Suggested for you</h3>
+        <h3 className="text-sm sm:text-base font-bold text-gray-900 truncate">Suggested for you</h3>
       </div>
 
       {loading ? (
-        <div className="space-y-3 sm:space-y-4">
+        <div className="space-y-3">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="animate-pulse">
-              <div className="flex items-center space-x-2 sm:space-x-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded-full"></div>
-                <div className="flex-1">
-                  <div className="h-3 sm:h-4 bg-gray-200 rounded w-3/4 mb-1.5 sm:mb-2"></div>
-                  <div className="h-2.5 sm:h-3 bg-gray-200 rounded w-1/2"></div>
+            <div key={i} className="animate-pulse bg-gray-50 rounded-lg p-3">
+              <div className="flex items-start gap-2.5">
+                <div className="w-10 h-10 bg-gray-200 rounded-full flex-shrink-0"></div>
+                <div className="flex-1 space-y-2">
+                  <div className="h-3.5 bg-gray-200 rounded w-3/4"></div>
+                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-full"></div>
+                  <div className="h-7 bg-gray-200 rounded w-full"></div>
                 </div>
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <div className="space-y-3 sm:space-y-4">
+        <div className="space-y-3">
           {suggestedUsers.map((suggestedUser, index) => (
             <motion.div
               key={suggestedUser.id}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="group bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:from-blue-50 hover:to-purple-50 transition-all duration-300 overflow-hidden"
+              className="group bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:from-blue-50 hover:to-purple-50 transition-all duration-300"
             >
-              <div className="flex items-start space-x-2 sm:space-x-3 w-full">
+              <div className="flex items-start gap-2.5 sm:gap-3 w-full">
+                {/* Avatar Section */}
                 <div className="relative flex-shrink-0">
                   <Avatar
                     src={suggestedUser.avatar_url}
                     alt={suggestedUser.name}
                     name={suggestedUser.name}
                     size="md"
+                    className="ring-2 ring-white shadow-sm"
                   />
                   {suggestedUser.is_verified && (
                     <div
-                      className={`absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 rounded-full flex items-center justify-center ${(
+                      className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center border-2 border-white shadow-sm ${(
                         suggestedUser.role === 'admin' || suggestedUser.role === 'administrator'
                       ) ? 'bg-orange-500' : (suggestedUser.role === 'coach' ? 'bg-violet-500' : (suggestedUser.role === 'aspirant' ? 'bg-blue-500' : 'bg-blue-500'))}`}
                     >
-                      <Check className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" />
+                      <Check className="w-2 h-2 text-white" />
                     </div>
                   )}
                 </div>
                 
-                <div className="flex-1 min-w-0 overflow-hidden">
-                  <div className="flex items-center justify-between w-full">
+                {/* Content Section */}
+                <div className="flex-1 min-w-0 space-y-1.5">
+                  {/* Header with Name and Dismiss */}
+                  <div className="flex items-start justify-between gap-1">
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-medium text-gray-900 truncate">
+                      <h4 className="text-sm font-semibold text-gray-900 truncate-with-tooltip leading-tight">
                         {suggestedUser.name}
                       </h4>
                       {suggestedUser.username && (
-                        <p className="text-xs text-gray-500 truncate">
+                        <p className="text-xs text-gray-500 truncate-with-tooltip mt-0.5">
                           @{suggestedUser.username}
                         </p>
                       )}
                     </div>
                     
-                    <div className="flex items-center space-x-1 flex-shrink-0 ml-2">
-                      <button
-                        onClick={() => handleDismiss(suggestedUser.id)}
-                        className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-                        title="Dismiss"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => handleDismiss(suggestedUser.id)}
+                      className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-md transition-colors flex-shrink-0 min-h-[32px] min-w-[32px] flex items-center justify-center"
+                      title="Dismiss"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
                   </div>
                   
-                  <div className="flex items-center space-x-1 sm:space-x-2 mt-1 overflow-hidden">
-                    <span className={`px-1.5 sm:px-2 py-0.5 text-xs font-medium rounded-full truncate flex-shrink-0 ${getRoleColor(suggestedUser.role)}`}>
+                  {/* Role and Sport Category */}
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className={`px-2 py-0.5 text-[11px] font-medium rounded-full flex-shrink-0 ${getRoleColor(suggestedUser.role)}`}>
                       {suggestedUser.role}
                     </span>
-                    <span className="text-xs text-gray-500 hidden sm:inline truncate flex-1 min-w-0">
+                    <span className="text-xs text-gray-500 capitalize truncate-with-tooltip flex-shrink min-w-0">
                       {suggestedUser.sports_category.replace('-', ' ')}
                     </span>
                   </div>
                   
+                  {/* Bio - Only show on larger sidebar or main content */}
                   {suggestedUser.bio && (
-                    <p className="text-xs text-gray-600 mt-1 line-clamp-2 hidden sm:block break-words overflow-hidden">
+                    <p className="text-xs text-gray-600 truncate-2-lines overflow-safe leading-snug hidden 2xl:block">
                       {suggestedUser.bio}
                     </p>
                   )}
                   
-                  <div className="flex items-center justify-between mt-2 w-full">
-                    <div className="flex items-center space-x-2 sm:space-x-3 text-xs text-gray-500 flex-1 min-w-0">
-                      <span className="truncate">{formatNumber(suggestedUser.followers_count)} followers</span>
-                      <span className="hidden sm:inline truncate">{formatNumber(suggestedUser.posts_count)} posts</span>
-                    </div>
-                    
+                  {/* Stats */}
+                  <div className="flex items-center gap-2 text-xs text-gray-500 pt-0.5">
+                    <span className="truncate">
+                      <span className="font-semibold text-gray-900">{formatNumber(suggestedUser.followers_count)}</span> followers
+                    </span>
+                    <span className="hidden xl:inline truncate">
+                      <span className="font-semibold text-gray-900">{formatNumber(suggestedUser.posts_count)}</span> posts
+                    </span>
+                  </div>
+                  
+                  {/* Follow Button - Full Width on Small Sidebar */}
+                  <div className="pt-1">
                     <button
                       onClick={() => handleFollow(suggestedUser.id)}
                       disabled={followingUsers.has(suggestedUser.id) || processingFollow.has(suggestedUser.id)}
-                      className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-full transition-colors flex-shrink-0 ml-2 ${
+                      className={`w-full px-3 py-1.5 text-xs font-semibold rounded-lg transition-all min-h-[36px] shadow-sm ${
                         followingUsers.has(suggestedUser.id)
-                          ? 'bg-green-100 text-green-700 cursor-default'
-                          : 'bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50'
+                          ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                          : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed'
                       }`}
                     >
                       {processingFollow.has(suggestedUser.id) ? (
-                        <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mx-auto"></div>
                       ) : followingUsers.has(suggestedUser.id) ? (
-                        <div className="flex items-center space-x-1">
-                          <Check className="h-3 w-3" />
-                          <span className="hidden sm:inline">Following</span>
+                        <div className="flex items-center justify-center gap-1.5">
+                          <Check className="h-3.5 w-3.5" />
+                          <span>Following</span>
                         </div>
                       ) : (
-                        <div className="flex items-center space-x-1">
-                          <UserPlus className="h-3 w-3" />
-                          <span className="hidden sm:inline">Follow</span>
+                        <div className="flex items-center justify-center gap-1.5">
+                          <UserPlus className="h-3.5 w-3.5" />
+                          <span>Follow</span>
                         </div>
                       )}
                     </button>
@@ -335,21 +347,24 @@ export function SuggestedUsers() {
           ))}
           
           {suggestedUsers.length === 0 && (
-            <div className="text-center py-6">
-              <Users className="h-8 w-8 text-gray-300 mx-auto mb-2" />
-              <p className="text-sm text-gray-500">No suggestions available</p>
+            <div className="text-center py-8 sm:py-10">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Users className="h-8 w-8 sm:h-10 sm:w-10 text-gray-400" />
+              </div>
+              <p className="text-sm sm:text-base text-gray-600 font-medium">No suggestions available</p>
+              <p className="text-xs sm:text-sm text-gray-500 mt-1">Check back later for new connections</p>
             </div>
           )}
         </div>
       )}
       
       {suggestedUsers.length > 0 && (
-        <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-100">
+        <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
           <button 
             onClick={handleSeeAllSuggestions}
-            className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 font-medium w-full text-center transition-colors duration-200 hover:bg-blue-50 rounded-lg py-1.5 sm:py-2"
+            className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 font-semibold w-full text-center transition-all duration-200 hover:bg-blue-50 rounded-lg py-2 min-h-[40px]"
           >
-            See all suggestions
+            See all →
           </button>
         </div>
       )}

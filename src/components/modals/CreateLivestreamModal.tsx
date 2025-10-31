@@ -139,24 +139,29 @@ export const CreateLivestreamModal: React.FC<CreateLivestreamModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-0 md:p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        className="mobile-modal bg-white rounded-none md:rounded-xl shadow-xl w-full max-w-2xl max-h-screen md:max-h-[90vh] overflow-y-auto"
       >
-        <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-bold text-gray-900">Create Livestream</h2>
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b bg-gradient-to-r from-red-50 to-orange-50">
+          <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1 overflow-hidden">
+            <div className="bg-gradient-to-r from-red-500 to-orange-500 p-1.5 sm:p-2 rounded-lg flex-shrink-0">
+              <Youtube className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+            </div>
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 truncate">Create Livestream</h2>
+          </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0 ml-2 min-h-[44px] min-w-[44px]"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           <UserDebugInfo />
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">

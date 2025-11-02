@@ -30,6 +30,8 @@ import { CreateLivestreamModal } from '../modals/CreateLivestreamModal';
 import { WomensLounge } from './WomensLounge';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { LevelProgress } from '../gamification/LevelProgress';
+import { QuestsPanel } from '../gamification/QuestsPanel';
 import { apiService } from '../../services/api';
 import { transformLivestreamFromAPI } from '../../utils/livestreamUtils';
 import toast from 'react-hot-toast';
@@ -258,62 +260,74 @@ export function PlayPage() {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6"
       >
-        {/* Enhanced Header */}
+        {/* Enhanced Header with Grid Layout */}
         <div className="mb-6 sm:mb-8">
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 sm:p-6 mb-4 sm:mb-6">
-            <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:justify-between lg:items-center">
-              <div className="flex-1">
-                <div className="flex items-center space-x-3 mb-3">
-                  <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl">
-                    <Play className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+          <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-6">
+            {/* Main Header Content - Takes 8 columns on XL screens */}
+            <div className="xl:col-span-8">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 p-4 sm:p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="p-1.5 sm:p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+                    <Play className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
                       Play & Learn
                     </h1>
-                    <p className="text-gray-600 mt-1 text-sm sm:text-base">Discover, learn, and grow with premium content</p>
+                    <p className="text-gray-600 mt-0.5 text-xs sm:text-sm">Discover, learn, and grow with premium content</p>
                   </div>
                 </div>
                 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mt-4">
-                  <div className="bg-blue-50 rounded-lg p-2 sm:p-3">
-                    <div className="flex items-center space-x-1 sm:space-x-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg sm:rounded-xl p-2 sm:p-3 text-center">
+                    <div className="flex items-center justify-center space-x-1 sm:space-x-2 mb-1">
                       <Play className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600" />
-                      <span className="text-xs sm:text-sm font-medium text-blue-900">Videos</span>
+                      <span className="text-xs sm:text-sm font-medium text-blue-700">Videos</span>
                     </div>
                     <p className="text-lg sm:text-2xl font-bold text-blue-600">{stats.totalVideos}</p>
                   </div>
-                  <div className="bg-red-50 rounded-lg p-2 sm:p-3">
-                    <div className="flex items-center space-x-1 sm:space-x-2">
+                  <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg sm:rounded-xl p-2 sm:p-3 text-center">
+                    <div className="flex items-center justify-center space-x-1 sm:space-x-2 mb-1">
                       <Radio className="h-3 w-3 sm:h-4 sm:w-4 text-red-600" />
-                      <span className="text-xs sm:text-sm font-medium text-red-900">Live</span>
+                      <span className="text-xs sm:text-sm font-medium text-red-700">Live</span>
                     </div>
                     <p className="text-lg sm:text-2xl font-bold text-red-600">{stats.liveStreams}</p>
                   </div>
-                  <div className="bg-purple-50 rounded-lg p-2 sm:p-3">
-                    <div className="flex items-center space-x-1 sm:space-x-2">
+                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg sm:rounded-xl p-2 sm:p-3 text-center">
+                    <div className="flex items-center justify-center space-x-1 sm:space-x-2 mb-1">
                       <Star className="h-3 w-3 sm:h-4 sm:w-4 text-purple-600" />
-                      <span className="text-xs sm:text-sm font-medium text-purple-900">Memberships</span>
+                      <span className="text-xs sm:text-sm font-medium text-purple-700">Memberships</span>
                     </div>
                     <p className="text-lg sm:text-2xl font-bold text-purple-600">{stats.totalMemberships}</p>
                   </div>
-                  <div className="bg-green-50 rounded-lg p-2 sm:p-3">
-                    <div className="flex items-center space-x-1 sm:space-x-2">
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg sm:rounded-xl p-2 sm:p-3 text-center">
+                    <div className="flex items-center justify-center space-x-1 sm:space-x-2 mb-1">
                       <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-green-600" />
-                      <span className="text-xs sm:text-sm font-medium text-green-900">Total</span>
+                      <span className="text-xs sm:text-sm font-medium text-green-700">Total</span>
                     </div>
                     <p className="text-lg sm:text-2xl font-bold text-green-600">{stats.totalVideos + stats.totalLivestreams}</p>
                   </div>
                 </div>
               </div>
-              
-              <div className="lg:ml-6 w-full lg:w-auto">
-                <TokenWallet tokens={userTokens} />
-              </div>
+            </div>
+            
+            {/* Right Sidebar - Token Wallet & Level Progress - Takes 4 columns on XL screens */}
+            <div className="xl:col-span-4 space-y-4 sm:space-y-6">
+              <TokenWallet tokens={userTokens} />
+              <LevelProgress compact />
             </div>
           </div>
         </div>
+
+        {/* Gamification Section - Full Width */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 sm:mb-8"
+        >
+          <QuestsPanel type="daily" />
+        </motion.div>
 
         {/* Enhanced Navigation and Search */}
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 mb-8">

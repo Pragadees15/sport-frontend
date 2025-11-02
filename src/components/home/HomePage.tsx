@@ -4,6 +4,8 @@ import { PostCard } from '../posts/PostCard';
 import { CreatePost } from '../posts/CreatePost';
 import { SuggestedUsers } from './SuggestedUsers.tsx';
 import { ActivityStats } from './ActivityStats.tsx';
+import { LevelProgress } from '../gamification/LevelProgress';
+import { QuestsPanel } from '../gamification/QuestsPanel';
 import { Post } from '../../types';
 import { useAuthStore } from '../../store/authStore';
 import { apiService } from '../../services/api';
@@ -170,7 +172,21 @@ export function HomePage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
+              <LevelProgress />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+            >
               <ActivityStats />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <QuestsPanel type="daily" compact />
             </motion.div>
           </div>
 

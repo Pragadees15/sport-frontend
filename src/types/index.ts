@@ -324,3 +324,121 @@ export interface Event {
   isActive: boolean;
   createdAt: string;
 }
+
+// =====================================================
+// GAMIFICATION TYPES
+// =====================================================
+
+export interface UserLevel {
+  user_id: string;
+  level: number;
+  current_xp: number;
+  total_xp: number;
+  xp_to_next_level: number;
+  login_streak: number;
+  max_login_streak: number;
+  activity_streak: number;
+  max_activity_streak: number;
+  last_login_date?: string;
+  last_activity_date?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Achievement {
+  id: string;
+  code: string;
+  name: string;
+  description: string;
+  category: 'engagement' | 'social' | 'content' | 'milestone' | 'special';
+  icon_url?: string;
+  xp_reward: number;
+  token_reward: number;
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  requirement_type: string;
+  requirement_value: number;
+  is_active: boolean;
+  sort_order: number;
+  unlocked?: boolean;
+  is_new?: boolean;
+  unlocked_at?: string;
+}
+
+export interface UserAchievement {
+  id: string;
+  user_id: string;
+  achievement_id: string;
+  unlocked_at: string;
+  progress: number;
+  is_new: boolean;
+  achievement?: Achievement;
+}
+
+export interface Quest {
+  id: string;
+  code: string;
+  title: string;
+  description: string;
+  quest_type: 'daily' | 'weekly' | 'special';
+  category: string;
+  requirement_type: string;
+  requirement_value: number;
+  xp_reward: number;
+  token_reward: number;
+  duration_type: 'daily' | 'weekly' | 'monthly' | 'permanent';
+  is_recurring: boolean;
+  is_active: boolean;
+  sort_order: number;
+  userProgress?: {
+    progress: number;
+    target: number;
+    status: 'active' | 'completed' | 'expired' | 'claimed';
+    expires_at?: string;
+    completed_at?: string;
+  };
+}
+
+export interface UserQuest {
+  id: string;
+  user_id: string;
+  quest_id: string;
+  progress: number;
+  target: number;
+  status: 'active' | 'completed' | 'expired' | 'claimed';
+  started_at: string;
+  completed_at?: string;
+  expires_at?: string;
+  xp_earned: number;
+  tokens_earned: number;
+  quest?: Quest;
+}
+
+export interface XPTransaction {
+  id: string;
+  user_id: string;
+  amount: number;
+  source_type: string;
+  source_id?: string;
+  description?: string;
+  created_at: string;
+}
+
+export interface LeaderboardEntry {
+  rank: number;
+  user_id: string;
+  name: string;
+  username?: string;
+  avatar_url?: string;
+  is_verified?: boolean;
+  role?: string;
+  value: number;
+  level?: number;
+  total_xp?: number;
+}
+
+export interface Leaderboard {
+  leaderboard: LeaderboardEntry[];
+  userRank?: number;
+  userData?: LeaderboardEntry;
+  type: 'xp' | 'level' | 'tokens' | 'streak' | 'achievements';
+}

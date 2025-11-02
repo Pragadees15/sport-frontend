@@ -22,6 +22,8 @@ import { PostCard } from '../posts/PostCard';
 import { EditProfileModal } from './EditProfileModal';
 import { FollowersModal } from './FollowersModal';
 import { EvidenceUpload } from '../verification/EvidenceUpload';
+import { LevelProgress } from '../gamification/LevelProgress';
+import { AchievementsPanel } from '../gamification/AchievementsPanel';
 import { Button } from '../ui/Button';
 import { Avatar } from '../ui/Avatar';
 import { apiService } from '../../services/api';
@@ -32,7 +34,7 @@ import toast from 'react-hot-toast';
 
 export function UserProfile() {
   const { user } = useAuthStore();
-  const [activeTab, setActiveTab] = useState<'posts' | 'shared'>('posts');
+  const [activeTab, setActiveTab] = useState<'posts' | 'shared' | 'achievements'>('posts');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showFollowersModal, setShowFollowersModal] = useState(false);
   const [followersModalType, setFollowersModalType] = useState<'followers' | 'following'>('followers');
@@ -579,6 +581,27 @@ export function UserProfile() {
                   />
                 )}
               </motion.button>
+              
+              <motion.button
+                whileHover={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}
+                onClick={() => setActiveTab('achievements')}
+                className={`relative px-4 sm:px-6 md:px-8 py-3 sm:py-4 text-sm font-semibold transition-all duration-200 whitespace-nowrap ${
+                  activeTab === 'achievements'
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-600 hover:text-gray-800'
+                }`}
+              >
+                <div className="flex items-center space-x-1.5 sm:space-x-2">
+                  <Trophy className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <span>Achievements</span>
+            </div>
+                {activeTab === 'achievements' && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500"
+                  />
+                )}
+              </motion.button>
             </nav>
           </div>
 
@@ -677,6 +700,11 @@ export function UserProfile() {
                 </p>
               </div>
             )
+          ) : activeTab === 'achievements' ? (
+            <div className="space-y-4 sm:space-y-6">
+              <LevelProgress />
+              <AchievementsPanel />
+            </div>
           ) : null}
             </motion.div>
           </AnimatePresence>

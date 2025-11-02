@@ -738,6 +738,76 @@ class ApiService {
     return this.handleResponse<{ stats: { currentBalance: number; totalEarned: number; totalSpent: number } }>(response);
   }
 
+  // =====================================================
+  // GAMIFICATION ENDPOINTS
+  // =====================================================
+
+  async getUserLevel(userId: string): Promise<{ level: any; progress: number }> {
+    const response = await fetch(`${API_BASE_URL}/gamification/levels/${userId}`, {
+      headers: this.getAuthHeaders(),
+    });
+    return this.handleResponse<{ level: any; progress: number }>(response);
+  }
+
+  async getAchievements(): Promise<{ achievements: any[] }> {
+    const response = await fetch(`${API_BASE_URL}/gamification/achievements`, {
+      headers: this.getAuthHeaders(),
+    });
+    return this.handleResponse<{ achievements: any[] }>(response);
+  }
+
+  async getUserAchievements(userId: string): Promise<{ achievements: any[]; stats: any }> {
+    const response = await fetch(`${API_BASE_URL}/gamification/achievements/user/${userId}`, {
+      headers: this.getAuthHeaders(),
+    });
+    return this.handleResponse<{ achievements: any[]; stats: any }>(response);
+  }
+
+  async markAchievementViewed(achievementId: string): Promise<{ message: string }> {
+    const response = await fetch(`${API_BASE_URL}/gamification/achievements/${achievementId}/view`, {
+      method: 'POST',
+      headers: this.getAuthHeaders(),
+    });
+    return this.handleResponse<{ message: string }>(response);
+  }
+
+  async getQuests(type?: 'daily' | 'weekly' | 'all'): Promise<{ quests: any[] }> {
+    const queryParams = type && type !== 'all' ? `?type=${type}` : '';
+    const response = await fetch(`${API_BASE_URL}/gamification/quests${queryParams}`, {
+      headers: this.getAuthHeaders(),
+    });
+    return this.handleResponse<{ quests: any[] }>(response);
+  }
+
+  async getUserQuests(): Promise<{ active: any[]; completed: any[]; stats: any }> {
+    const response = await fetch(`${API_BASE_URL}/gamification/quests/user`, {
+      headers: this.getAuthHeaders(),
+    });
+    return this.handleResponse<{ active: any[]; completed: any[]; stats: any }>(response);
+  }
+
+  async claimQuestReward(questId: string): Promise<{ message: string; xp_earned: number; tokens_earned: number }> {
+    const response = await fetch(`${API_BASE_URL}/gamification/quests/${questId}/claim`, {
+      method: 'POST',
+      headers: this.getAuthHeaders(),
+    });
+    return this.handleResponse<{ message: string; xp_earned: number; tokens_earned: number }>(response);
+  }
+
+  async getLeaderboard(type: 'xp' | 'level' | 'tokens' | 'streak' | 'achievements' = 'xp', limit: number = 10): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/gamification/leaderboard?type=${type}&limit=${limit}`, {
+      headers: this.getAuthHeaders(),
+    });
+    return this.handleResponse<any>(response);
+  }
+
+  async getXPTransactions(page: number = 1, limit: number = 20): Promise<{ transactions: any[]; pagination: any }> {
+    const response = await fetch(`${API_BASE_URL}/gamification/xp/transactions?page=${page}&limit=${limit}`, {
+      headers: this.getAuthHeaders(),
+    });
+    return this.handleResponse<{ transactions: any[]; pagination: any }>(response);
+  }
+
   async purchaseTokens(purchaseData: {
     packageId: string;
     paymentMethod: string;
